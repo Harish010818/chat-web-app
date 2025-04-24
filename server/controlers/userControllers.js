@@ -1,7 +1,8 @@
-import { User } from "../models/userModel";
+import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+// register handler
 export const register = async (req, res) => {
     try {
         const { fullName, username, password, confirmPassword, gender} = req.body;
@@ -55,7 +56,6 @@ export const register = async (req, res) => {
 
 
 // login handler
-
 export const login = async(req, res) => {
     try {
        const {username, password} = req.body;
@@ -70,7 +70,7 @@ export const login = async(req, res) => {
         
        const isPswdMatch = 0;
 
-       if(user) isPswdMatch = await bcrypt.compare(password, user.password);   
+       if(user)isPswdMatch = await bcrypt.compare(password, user.password);   
 
        if(!isPswdMatch || !user){
             return res.status(400).json({
@@ -94,3 +94,33 @@ export const login = async(req, res) => {
         console.error(err); 
     } 
 } 
+
+
+// user logout handler
+export const logout = async ( _ , res) => {
+    try {
+        return res.status(200)
+                  .cookie("token", " ", { maxAge: 0 })
+                  .json({
+                    message : "logged out successfully"
+                }) 
+    }
+    catch(err){
+        console.error(err);
+    }  
+}
+
+
+// get other users handler
+export const otherUsers = async(req, res) => {
+      try {
+        const loggedInUserId = req.id;
+         
+        const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
+        return res.status(200).json(otherUsers);
+         
+      } catch(err) {
+        console.error(err);
+    }
+}
+

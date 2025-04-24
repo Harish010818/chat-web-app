@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const messageModel = new mongoose.Schema({
       senderId : {
-         type : mongoose.Schema.Types.ObjectId,
-         ref : "User",
-         required : true
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
+        required : true
       },
 
       receiverId : {
@@ -15,9 +15,8 @@ const messageModel = new mongoose.Schema({
 
       message : {
         type : String,
-         required : true 
-      } 
-
+        required : true 
+    } 
 })
 
 export const Message = mongoose.model('Message', messageModel);

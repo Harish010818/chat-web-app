@@ -1,0 +1,71 @@
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import toast from "react-hot-toast"
+import axios from "axios";
+// import { useDispatch } from "react-redux";
+// import { setAuthUser } from '../redux/userSlice';
+
+
+const Login = () => {
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+  
+//   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`https://localhost3000/api/v1/user/login`, user, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      navigate("/");
+      console.log(res);
+//    dispatch(setAuthUser(res.data));
+    } catch (error) {
+      toast.error(error.response.data.message);
+      console.log(error);
+    }
+    setUser({
+      username: "",
+      password: ""
+    })
+  }
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[var(--office-blue)] px-4">
+      <div className='text-black w-full max-w-md bg-[var(--office-white)] shadow-xl p-8 space-y-6'>
+        <h1 className='text-3xl font-bold text-center text-gray-800'>Login</h1>
+        <form onSubmit={onSubmitHandler} className="space-y-5">
+
+          <div>
+            <input
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="text"
+              placeholder='Username' />
+          </div>
+          <div>
+            <input
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              type="password"
+              placeholder='Password' />
+          </div>
+            <button type="submit" className="text-white w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-[var(--dark-blue)]">Login</button>
+          <p className='text-center my-2'>Don't have an account? <Link to="/signup" className='text-[var(--dark-blue)]' > signup </Link></p>
+          <div>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+export default Login
