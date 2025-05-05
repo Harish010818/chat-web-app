@@ -16,7 +16,7 @@ const messageModel = new mongoose.Schema({
       message : {
         type : String,
         required : true 
-    } 
+     } 
 })
 
 export const Message = mongoose.model('Message', messageModel);

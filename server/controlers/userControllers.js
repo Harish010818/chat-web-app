@@ -2,10 +2,11 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-// register handler
+//register handler
 export const register = async (req, res) => {
     try {
         const { fullName, username, password, confirmPassword, gender} = req.body;
+
         if ( !fullName || !username || !password || !confirmPassword || !gender) {
             return res.status(400).json({
                 message: "All field are required"
@@ -19,25 +20,24 @@ export const register = async (req, res) => {
            })
        }
 
-
        const user = await User.findOne({ username });
         if (user) {
             return res.status(400).json({
-                message: " The user is already exist with this username"
+                message: "The user is already exist with this username"
             })
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const maleAvatar = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleAvatar =  `https://avatar.iran.liara.run/public/girl username=${username}`;
+        const femaleAvatar =  `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
         const userData = await User.create(
             {
                 fullName, 
                 username, 
                 password : hashedPassword, 
-                profilePhoto : gender == male ?  maleAvatar : femaleAvatar, 
+                profilePhoto : gender == "male" ?  maleAvatar : femaleAvatar, 
                 gender
             }
         )
@@ -62,13 +62,13 @@ export const login = async(req, res) => {
 
        if( !username || !password ){
             return res.status(400).json({
-                message: "All field are required"
+                message : "All field are required"
             })
        }
 
        const user = await User.findOne({ username });
         
-       const isPswdMatch = 0;
+       let isPswdMatch = 0;
 
        if(user)isPswdMatch = await bcrypt.compare(password, user.password);   
 
@@ -88,7 +88,13 @@ export const login = async(req, res) => {
                 sameSite : "none",
                 maxAge : 24 * 60 * 60 * 1000   
             }) 
-            .json({message: "Login successfully",  user})
+            .json({
+                message: "Login successfully",  
+                _id: user._id,
+                username: user.username,
+                fullName: user.fullName,
+                profilePhoto: user.profilePhoto
+            })
      
     }  catch(err){
         console.error(err); 
@@ -100,7 +106,7 @@ export const login = async(req, res) => {
 export const logout = async ( _ , res) => {
     try {
         return res.status(200)
-                  .cookie("token", " ", { maxAge: 0 })
+                  .cookie("token", " ", {maxAge: 0 })
                   .json({
                     message : "logged out successfully"
                 }) 
@@ -111,15 +117,16 @@ export const logout = async ( _ , res) => {
 }
 
 
-// get other users handler
+//get other users handler
 export const otherUsers = async(req, res) => {
       try {
         const loggedInUserId = req.id;
          
         const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
+
         return res.status(200).json(otherUsers);
          
-      } catch(err) {
+    }  catch(err) {
         console.error(err);
     }
 }

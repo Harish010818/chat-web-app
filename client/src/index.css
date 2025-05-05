@@ -3,7 +3,12 @@
 :root {
   --office-blue: #3F72EC; 
   --office-white: #FEFEFE; 
-  --dark-blue: #0A74CA; 
+  --dark-blue: #0A74CA;
+  --homepage-white: #FFFFFF;  
+  --chat-bg: #F6F8FC; 
+
+
+
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -16,6 +21,31 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  /* Customize the scrollbar width */
+  width:6px;
+}
+
+::-webkit-scrollbar-track {
+  /* Customize the scrollbar track */
+  background-color: aliceblue;
+}
+
+::-webkit-scrollbar-thumb {
+  /* Customize the scrollbar thumb */
+  background: rgb(202, 198, 198);
+  border-radius: 1000px;
+}
+
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  overflow: hidden; /* So that body doesn't scroll */
+  position: relative;
 }
 
 

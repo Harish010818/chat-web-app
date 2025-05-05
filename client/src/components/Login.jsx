@@ -1,32 +1,37 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
 import toast from "react-hot-toast"
 import axios from "axios";
-// import { useDispatch } from "react-redux";
-// import { setAuthUser } from '../redux/userSlice';
-
+import { setAuthUser } from '../useRedux/userSlice';
 
 const Login = () => {
   const [user, setUser] = useState({
-    username: "",
-    password: "",
+      username : "",
+      password : "",
   });
   
-//   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`https://localhost3000/api/v1/user/login`, user, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
+      const res = await axios.post("http://localhost:3000/api/v1/user/login", 
+        user, 
+        {
+        headers: {'Content-Type': 'application/json'},
         withCredentials: true
-      });
-      navigate("/");
-      console.log(res);
-//    dispatch(setAuthUser(res.data));
+        }  
+     );
+
+    if(res){
+        navigate("/");
+        toast.success(res.data.message);
+        dispatch(setAuthUser(res.data));
+    }
+
+
     } catch (error) {
       toast.error(error.response.data.message);
       console.log(error);
@@ -44,6 +49,7 @@ const Login = () => {
 
           <div>
             <input
+              name="username"
               value={user.username}
               onChange={(e) => setUser({ ...user, username: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -52,6 +58,7 @@ const Login = () => {
           </div>
           <div>
             <input
+              name="password" 
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

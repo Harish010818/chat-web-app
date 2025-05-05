@@ -1,12 +1,17 @@
 import { Conversation } from "../models/conversationModel.js";
 import { Message } from "../models/messageModel.js";
 
-
 export const sendMesaage =  async(req, res) => {
     try {   
        const senderId = req.id;
        const receiverId = req.params.id;
-       const message = req.body;
+       const { message } = req.body;
+
+       if(!message){
+          return res.status(401).json({
+               message : "Input field can't be empty" 
+          })
+       }
 
        let gotConversation = await Conversation.findOne ({
             Participants : {$all : [senderId, receiverId]}
@@ -16,8 +21,9 @@ export const sendMesaage =  async(req, res) => {
             gotConversation = await Conversation.create({
             Participants :  [senderId, receiverId]
         })
-      }
+     }
        
+
        const newMessage = await Message.create({
             senderId,
             receiverId,
@@ -25,17 +31,18 @@ export const sendMesaage =  async(req, res) => {
        })
        
        if(newMessage) {
-            gotConversation.messages.push(newMessage._id);
+          gotConversation.messages.push(newMessage._id);
        }
 
-       //await gotConversation.save();
+       await gotConversation.save();
+
        return res.status(200).json({
-              message : "message sent;"
+            newMessage
        })
 
      }  
-        catch(err){
-        console.error(err);  
+       catch(err){
+             console.error(err);  
    }     
 } 
 
@@ -47,10 +54,11 @@ export const receiveMessage = async(req, res) => {
            const senderId = req.id;
 
            let conversation = await Conversation.findOne({
-                Participants : {$all : [senderId, receiverId]}
+               Participants : {$all : [senderId, receiverId]}
           }).populate("messages");
+          
+          return res.status(200).json(conversation?.messages);
 
-          console.log(conversation);
        }  catch(err){
           console.error(err);
        }
