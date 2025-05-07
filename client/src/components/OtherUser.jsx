@@ -8,12 +8,12 @@ const OtherUser = ({ user }) => {
 
     const dispatch = useDispatch();
 
-    const {selectedUser} = useSelector(store => store.user);
+    const {selectedUser, onlineUsers} = useSelector(store => store.user);
     
-    // const isOnline = onlineUsers?.includes(user._id);
+    const isOnline = onlineUsers?.includes(user._id);
 
     const selectedUserHandler = (user) => {
-          dispatch(setSelectedUser(user));
+        dispatch(setSelectedUser(user));
     }
 
     return (
@@ -28,7 +28,7 @@ const OtherUser = ({ user }) => {
                         alt="user-profile"
                         className="w-full h-full object-cover rounded-full border-2 border-gray-300 shadow-md"
                     />
-                    <span className="absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                    <span className = {`${isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : " "}`}></span>
                 </div>
 
                 <div className='flex flex-col flex-1'>
