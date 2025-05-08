@@ -19,7 +19,7 @@ const Sidebar = () => {
 
         if(conversationUser) {
             dispatch(setOtherUser([conversationUser])); 
-        } else{
+        }  else {
             toast.error("User not found!");
         }
     }

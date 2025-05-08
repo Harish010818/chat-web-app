@@ -1,33 +1,30 @@
-import dotenv from "dotenv";
 import express from "express";
-import connectDB from "./db/database.js";
+import dotenv from "dotenv"; 
+import connectDB from "./config/database.js";
+import userRoute from "./routes/userRoute.js";
+import messageRoute from "./routes/messageRoute.js";
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
 import cors from "cors";
-import userRouter from "./routes/userRoute.js";
-import messageRouter from "./routes/messageRoute.js";
-import socketServer from "./socket/socket.js"; // ✅ import socket server
+import { app,server } from "./socket/socket.js";
+dotenv.config({});
 
 
-dotenv.config();
-connectDB();
-
-// Use the existing express app from socketServer
-const { app, server } = socketServer;
-
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// middleware
+app.use(express.urlencoded({extended:true}));
+app.use(express.json()); 
 app.use(cookieParser());
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true}));
 
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 
-// APIs
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/message", messageRouter);
+// routes
+app.use("/api/v1/user",userRoute); 
+app.use("/api/v1/message",messageRoute);
 
-const PORT = process.env.PORT || 8000;
 
-// ✅ Start socket-compatible server
+const PORT = process.env.PORT || 5000;
+
 server.listen(PORT, () => {
-  console.log(`🚀 Server with socket.io listening at http://localhost:${PORT}`);
+    connectDB();
+    console.log(`Server listen at prot ${PORT}`);
 });
+

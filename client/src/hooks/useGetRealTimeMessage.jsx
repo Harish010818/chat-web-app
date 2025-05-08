@@ -15,6 +15,5 @@ const useGetRealTimeMessage = () => {
     }, [socket, setMessages, messages])
 }
 
-
 export default useGetRealTimeMessage;
 
