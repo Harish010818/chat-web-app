@@ -7,7 +7,7 @@ import { useEffect } from "react"
 import io from "socket.io-client"
 import { setSocket } from "./useRedux/socketSlice"
 import { setOnlineUsers } from "./useRedux/userSlice"
-import store from "./useRedux/store"
+//import store from "./useRedux/store"
 
 
 const router = createBrowserRouter([
@@ -40,18 +40,18 @@ function App() {
     if (authUser) {
      const socketio = io( 'http://localhost:3000', { query : { userId : authUser._id} } )
 
-     dispatch(setSocket(socketio));
+      dispatch(setSocket(socketio));
 
       socketio?.on('getOnlineUsers', (onlineUsers) => {
 
-      console.log("phle", store.getState(), onlineUsers);
+      // console.log("phle", store.getState(), onlineUsers);   
       
       dispatch(setOnlineUsers(onlineUsers))
 
-      console.log("baadme", store.getState(), onlineUsers);
+      // console.log("baadme", store.getState(), onlineUsers);
     });
     
-  console.log("sabse phle", store.getState(), socketio);
+  // console.log("sabse phle", store.getState(), socketio);
 
   return () => socketio.close();
   } 

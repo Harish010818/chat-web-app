@@ -5,9 +5,6 @@ import Messages from "./Messages"
 const MessageContainer = () => {
 
     const {selectedUser, authUser, onlineUsers} = useSelector(store => store.user);
-
-    console.log("message container", onlineUsers);
-
     const isOnline = onlineUsers?.includes(selectedUser?._id);
     
     return (

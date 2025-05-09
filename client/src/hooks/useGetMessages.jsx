@@ -26,5 +26,5 @@ export const useGetMessages = () => {
         }
      
         fetchMessages();    
-    }, [selectedUser])
+    }, [selectedUser?._id , setMessages])
 }

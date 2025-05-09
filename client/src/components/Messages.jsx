@@ -6,16 +6,18 @@ import useGetRealTimeMessage from '../hooks/useGetRealTimeMessage';
 
 
 const Messages = () => {
+
     useGetMessages();
+
     useGetRealTimeMessage();
+
     const { messages } = useSelector(store => store.message);
 
-    if(!messages) return;
 
     return (
         <div className='md:px-12 md:mt-[75px] md:pt-8 overflow-auto gap-1 grid md:pb-24'>
              {
-               messages?.map((message) => {
+              messages && messages?.map((message) => {
                     return (
                       <Message key={message._id} message = {message} />
                     )
