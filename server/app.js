@@ -17,8 +17,8 @@ app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true}));
 
 
 // routes
-app.use("/api/v1/user",userRoute); 
-app.use("/api/v1/message",messageRoute);
+app.use("/api/v1/user", userRoute); 
+app.use("/api/v1/message", messageRoute);
 
 
 const PORT = process.env.PORT || 5000;

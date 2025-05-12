@@ -7,7 +7,6 @@ import { useEffect } from "react"
 import io from "socket.io-client"
 import { setSocket } from "./useRedux/socketSlice"
 import { setOnlineUsers } from "./useRedux/userSlice"
-//import store from "./useRedux/store"
 
 
 const router = createBrowserRouter([

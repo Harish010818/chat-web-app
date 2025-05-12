@@ -31,10 +31,10 @@ const OtherUser = ({ user }) => {
                 <div className='flex flex-col flex-1'>
                     <div>
                         <p>{user?.fullName}</p>
-                        <p className='text-sm text-gray-500'>hey' i m using whatspp.....</p>
+                        <p className='text-sm text-gray-500'>Hey' i m using this app.....</p>
                     </div>
                 </div> 
-                <time className="text-xs text-gray-400 pr-2">12:45</time>
+                <time className="text-xs text-gray-400 pr-2">23:59</time>
             </div>
         </>
     )

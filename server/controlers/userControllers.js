@@ -117,11 +117,11 @@ export const logout = async ( _ , res) => {
 }
 
 
-//get other users handler
+// get other users handler
 export const otherUsers = async(req, res) => {
       try {
         const loggedInUserId = req.id;
-         
+
         const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
 
         return res.status(200).json(otherUsers);
