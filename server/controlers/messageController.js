@@ -3,6 +3,7 @@ import { Message } from "../models/messageModel.js";
 import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMesaage = async (req, res) => {
+   
    try {
       const senderId = req.id;
       const receiverId = req.params.id;
@@ -32,12 +33,13 @@ export const sendMesaage = async (req, res) => {
       })
 
       if (newMessage) {
+         gotConversation.lastMessage = newMessage._id;
          gotConversation.messages.push(newMessage._id);
       }
 
       // await gotConversation.save();
       // await newMessage.save();
-
+      
       await Promise.all([gotConversation.save(), newMessage.save()])
 
       // SOCKET IO INJECTED
@@ -58,6 +60,7 @@ export const sendMesaage = async (req, res) => {
 }
 
 
+
 // this will handle received messages
 export const receiveMessage = async (req, res) => {
    try {
@@ -76,18 +79,3 @@ export const receiveMessage = async (req, res) => {
 }
 
 
-// to fetch all users messages      
-export const allMessages = async (req, res) => {
-   try {
-      const senderId = req.id;
-      let conversation = await Conversation.find({
-         Participants: { $all: [senderId] }
-      }).populate("messages");
-
-
-      return res.status(200).json(conversation?.messages);
-   }
-   catch (err) {
-      console.error(err);
-   }
-}

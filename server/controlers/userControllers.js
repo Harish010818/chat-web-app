@@ -1,6 +1,7 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Conversation } from "../models/conversationModel.js";
 
 //register handler
 export const register = async (req, res) => {
@@ -118,16 +119,45 @@ export const logout = async ( _ , res) => {
 
 
 // get other users handler
-export const otherUsers = async(req, res) => {
-      try {
-        const loggedInUserId = req.id;
+// export const otherUsers = async(req, res) => {
+//       try {
+//         const loggedInUserId = req.id;
 
-        const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
+//         const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
 
-        return res.status(200).json(otherUsers);
+//         return res.status(200).json(otherUsers);
          
-    }  catch(err) {
-        console.error(err);
-    }
+//     }  catch(err) {
+//         console.error(err);
+//     }
+// }
+// to fetch all users messages  
+    
+export const otherUsers = async (req, res) => {
+   try {
+      const senderId = req.id;
+    
+      const allUsers = await User.find({ _id: { $ne: senderId } });
+
+      const users = await Promise.all(
+         allUsers.map(async (user) => {
+            const convo = await Conversation.find({
+               Participants: { $all: [senderId, user._id] }
+            }).populate("lastMessage");
+
+            return  {
+                _id: user._id,
+                fullName: user.fullName,
+                profilePhoto: user.profilePhoto,
+                lastMessage: convo[0]?.lastMessage?.message || null
+            }
+         })
+    );
+
+   return res.status(200).json(users);
+   }
+   catch (err) {
+      console.error(err);
+   }
 }
 

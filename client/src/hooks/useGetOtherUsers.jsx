@@ -1,10 +1,12 @@
 import axios from "axios"
 import { useEffect } from "react"
 import { setOtherUser } from "../useRedux/userSlice"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 export const useGetOtherUsers = () => {
     
+    const { messages } = useSelector(store => store.message);
     const dispatch = useDispatch();
     useEffect(() => {
 
@@ -25,5 +27,5 @@ export const useGetOtherUsers = () => {
           } 
       
         fetchOtherUsers()   
-    }, [])    
+    }, [messages])    
 }   

@@ -8,6 +8,5 @@ userRouter.route("/login").post(login);
 userRouter.route("/logout").get(logout);
 userRouter.route("/").get(isAuthenticated, otherUsers); 
 
-
 export default userRouter;
 

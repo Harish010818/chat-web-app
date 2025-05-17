@@ -22,7 +22,7 @@ const SendInput = () => {
 
                 {
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type' : 'application/json'
                     },
 
                     withCredentials: true
@@ -35,7 +35,7 @@ const SendInput = () => {
             console.log(error);
         }
 
-        setMessage("");
+       setMessage("");
     }
 
     return (
@@ -56,7 +56,6 @@ const SendInput = () => {
                 </button>
             </div>
         </form>
-
     )
 }
 
