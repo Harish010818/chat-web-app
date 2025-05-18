@@ -5,7 +5,7 @@ const userSlice = createSlice({
 
    initialState : {
       authUser : null,
-      otherUser : null,
+      otherUser : [],
       selectedUser : null,
       onlineUsers : null
    },

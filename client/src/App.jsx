@@ -37,7 +37,7 @@ function App() {
   useEffect(() => {
 
     if (authUser) {
-     const socketio = io( 'http://localhost:3000', { query : { userId : authUser._id} } )
+     const socketio = io( `${import.meta.env.VITE_API_URL}`, { query : { userId : authUser._id} } )
 
       dispatch(setSocket(socketio));
 

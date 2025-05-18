@@ -12,7 +12,7 @@ export const useGetMessages = () => {
 
         const fetchMessages = async () => {
             try {
-                 const res = await axios.get(`http://localhost:3000/api/v1/message/${selectedUser?._id}`,
+                 const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/v1/message/${selectedUser?._id}`,
                   {
                     withCredentials : true
                   }
