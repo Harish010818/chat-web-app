@@ -15,7 +15,7 @@ const OtherUser = ({ user }) => {
         <>
             <div
                 onClick={() => selectedUserHandler(user)}
-                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex gap-4 text-black items-center hover:bg-zinc-200  py-3 cursor-pointer border-b-1 border-slate-300 pl-8 pr-2`}
+                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex gap-4 text-black items-center hover:bg-zinc-200  py-3 cursor-pointer border-b-1 border-slate-300 pl-8 relative`}
             >
                 <div className="relative w-12 h-12">
                     <img
@@ -30,13 +30,13 @@ const OtherUser = ({ user }) => {
                     <div>
                         <p>{user?.fullName}</p>
                         <p className='text-sm text-gray-500'>
-                            {user?.lastMessage?.length > 30
-                                ? user.lastMessage.slice(0, 30) + "....."
-                                : user?.lastMessage || "Hey! I am using this app..."}
+                            {user?.lastMessage?.length > 35
+                                ? user.lastMessage.slice(0, 35) + "....."
+                                : user?.lastMessage || "Hey! I am using this chatapp..."}
                         </p>
                     </div>
                 </div>
-                <time className="text-xs text-gray-400 pr-2">23:59</time>
+                <time className="absolute text-xs text-gray-400 left-86">23:59</time>
             </div>
         </>
     )

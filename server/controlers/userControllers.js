@@ -133,6 +133,7 @@ export const logout = async ( _ , res) => {
 // }
 // to fetch all users messages  
     
+
 export const otherUsers = async (req, res) => {
    try {
       const senderId = req.id;
