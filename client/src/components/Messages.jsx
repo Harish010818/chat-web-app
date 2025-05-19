@@ -10,7 +10,6 @@ const Messages = () => {
    useGetRealTimeMessage();
 
     const { messages } = useSelector(store => store.message);
-    console.log(messages);
 
     return (
         <div className='md:px-12 md:mt-[75px] md:pt-8 overflow-auto gap-1 grid md:pb-24'>
