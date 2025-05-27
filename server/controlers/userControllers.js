@@ -138,7 +138,7 @@ export const otherUsers = async (req, res) => {
    try {
       const senderId = req.id;
     
-      const allUsers = await User.find({ _id: { $ne: senderId } });
+      const allUsers = await User.find({ _id: { $ne: senderId }});
 
       const users = await Promise.all(
          allUsers.map(async (user) => {
@@ -150,11 +150,14 @@ export const otherUsers = async (req, res) => {
                 _id: user._id,
                 fullName: user.fullName,
                 profilePhoto: user.profilePhoto,
-                lastMessage: convo[0]?.lastMessage?.message || null
+                lastMessage: convo[0]?.lastMessage?.message || null,
+                createdAt : convo[0]?.lastMessage?.createdAt || null
             }
          })
-    );
+   );
 
+   users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+    
    return res.status(200).json(users);
    }
    catch (err) {

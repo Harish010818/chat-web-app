@@ -11,6 +11,7 @@ const OtherUsers = () => {
 
     if ( !otherUser ) return; // early return in react
     
+    console.log(otherUser);
 
     return (
         <div className='mt-[200px] overflow-auto'>

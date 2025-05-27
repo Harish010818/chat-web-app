@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from '../useRedux/userSlice';
-
+import moment from "moment";
 const OtherUser = ({ user }) => {
 
     const dispatch = useDispatch();
@@ -36,7 +36,13 @@ const OtherUser = ({ user }) => {
                         </p>
                     </div>
                 </div>
-                <time className="absolute text-xs text-gray-400 left-86">23:59</time>
+                <time className="absolute text-xs text-gray-400 left-86">
+                    {
+                        user?.lastMessage
+                            ? moment(user.createdAt).format('HH:mm')
+                            : ''
+                    }
+                </time>
             </div>
         </>
     )
