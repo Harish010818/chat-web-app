@@ -11,6 +11,20 @@ const OtherUser = ({ user }) => {
         dispatch(setSelectedUser(user));
     }
 
+
+    const formatTime = (timestamp) => {
+        const now = moment();
+        const diff = now.diff(moment(timestamp), 'days')
+
+        if(diff < 1){
+            return `Today ${moment(timestamp).format('MMM D')}`;
+        }else if(diff === 1){
+            return `Yesterday ${moment(timestamp).format('MMM D')}`;
+        }else {
+            return moment(timestamp).format('MMM D');
+        }
+    }
+
     return (
         <>
             <div
@@ -39,7 +53,7 @@ const OtherUser = ({ user }) => {
                 <time className="absolute text-xs text-gray-400 left-86">
                     {
                         user?.lastMessage
-                            ? moment(user.createdAt).format('HH:mm')
+                            ? formatTime(user.createdAt)
                             : ''
                     }
                 </time>
