@@ -17,11 +17,11 @@ const OtherUser = ({ user }) => {
         const diff = now.diff(moment(timestamp), 'days')
 
         if(diff < 1){
-            return `Today ${moment(timestamp).format('MMM D')}`;
+            return `${moment(timestamp).format('D/MMM/YYYY')}`;
         }else if(diff === 1){
-            return `Yesterday ${moment(timestamp).format('MMM D')}`;
+            return `${moment(timestamp).format('D MMM YYYY')}`;
         }else {
-            return moment(timestamp).format('MMM D');
+            return moment(timestamp).format('D MMM YYYY');
         }
     }
 
@@ -40,17 +40,17 @@ const OtherUser = ({ user }) => {
                     <span className={isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : ""}></span>
                 </div>
 
-                <div className='flex flex-col flex-1'>
+                <div className='flex flex-col '>
                     <div>
                         <p>{user?.fullName}</p>
                         <p className='text-sm text-gray-500'>
-                            {user?.lastMessage?.length > 35
-                                ? user.lastMessage.slice(0, 35) + "....."
+                            {user?.lastMessage?.length > 32
+                                ? user.lastMessage.slice(0, 32) + "....."
                                 : user?.lastMessage || "Hey! I am using this chatapp..."}
                         </p>
                     </div>
                 </div>
-                <time className="absolute text-xs text-gray-400 left-86">
+                <time className="absolute text-xs text-gray-400 left-80">
                     {
                         user?.lastMessage
                             ? formatTime(user.createdAt)
