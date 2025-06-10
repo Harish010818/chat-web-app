@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { setAuthUser, setOtherUser, setSelectedUser } from '../useRedux/userSlice';
 import { setMessages } from '../useRedux/messageSlice';
 
-
 export const Logout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -30,11 +29,11 @@ export const Logout = () => {
             console.log(error);
         }
     }
-
     return (
-        <div className="mt-2 text-white cursor-pointer bottom-5 left-3 absolute">
-            {/* Tooltip (only shows when icon is hovered) */}
-            <div className="group relative">
+        <div className="md:text-white text-[var(--office-blue)] absolute md:bottom-5 md:left-3 md:top-auto md:right-auto z-10 right-4 top-8">
+
+            {/*Tooltip (only shows when icon is hovered)*/}
+            <div className="group relative cursor-pointer">
                 <div className="absolute left-14 top-2 z-10 bg-[var(--office-blue)] bg-opacity-70 text-[var(--homepage-white)] text-xs font-semibold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                     Logout
                 </div>
@@ -44,10 +43,9 @@ export const Logout = () => {
                     onClick={logoutHandler}
                     className="p-1 rounded hover:bg-white/15 hover:bg-opacity-10 transition-colors duration-200 group"
                 >
-                    <AiOutlineLogout size={30} />
+                    <AiOutlineLogout size={27} />
                 </div>
             </div>
         </div>
-
     )
 }

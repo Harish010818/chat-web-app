@@ -10,14 +10,14 @@ const HomePage = () => {
   const { authUser } = useSelector(store => store.user);
 
   return (
-    <div className="min-h-screen bg-[var(--office-blue)] pl-16 relative">
+    <div className="min-h-screen bg-[var(--office-blue)] overflow-hidden md:pl-16 relative">
       {authUser !== null ? (
         <>
           <Logout />
-          <div className="flex min-h-screen overflow-hidden bg-[var(--homepage-white)]">
+           <div className="flex min-h-screen overflow-hidden bg-[var(--homepage-white)]">
             <Sidebar />
             <MessageContainer />
-          </div>
+          </div> 
         </>
       ) : (
         <div className="flex flex-col items-center justify-center min-h-screen text-center text-white bg-[var(--office-blue)] px-4">

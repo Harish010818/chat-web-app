@@ -11,16 +11,15 @@ const OtherUser = ({ user }) => {
         dispatch(setSelectedUser(user));
     }
 
-
     const formatTime = (timestamp) => {
         const now = moment();
         const diff = now.diff(moment(timestamp), 'days')
 
         if(diff < 1){
             return `${moment(timestamp).format('D/MMM/YYYY')}`;
-        }else if(diff === 1){
+        }  else if(diff === 1){
             return `${moment(timestamp).format('D MMM YYYY')}`;
-        }else {
+        } else {
             return moment(timestamp).format('D MMM YYYY');
         }
     }
@@ -29,7 +28,7 @@ const OtherUser = ({ user }) => {
         <>
             <div
                 onClick={() => selectedUserHandler(user)}
-                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex gap-4 text-black items-center hover:bg-zinc-200  py-3 cursor-pointer border-b-1 border-slate-300 pl-8 relative`}
+                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex gap-4 text-black items-center hover:bg-zinc-200 py-3 cursor-pointer border-b-1 border-slate-300 pl-8`}
             >
                 <div className="relative w-12 h-12">
                     <img
@@ -40,7 +39,7 @@ const OtherUser = ({ user }) => {
                     <span className={isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : ""}></span>
                 </div>
 
-                <div className='flex flex-col '>
+                <div className='flex'>
                     <div>
                         <p>{user?.fullName}</p>
                         <p className='text-sm text-gray-500'>
@@ -48,15 +47,15 @@ const OtherUser = ({ user }) => {
                                 ? user.lastMessage.slice(0, 32) + "....."
                                 : user?.lastMessage || "Hey! I am using this chatapp..."}
                         </p>
-                    </div>
                 </div>
-                <time className="absolute text-xs text-gray-400 left-80">
+                <time className="text-xs text-gray-400 ">
                     {
-                        user?.lastMessage
+                      user?.lastMessage
                             ? formatTime(user.createdAt)
                             : ''
                     }
-                </time>
+                </time>                    
+                </div>
             </div>
         </>
     )

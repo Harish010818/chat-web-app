@@ -25,23 +25,22 @@ const Sidebar = () => {
     }
 
     return (
-        <div className = 'border-r border-slate-300 grid w-96 bg-[var(--homepage-white)] fixed h-screen' >
+        <div className = 'md:border-r md:border-slate-300 grid md:w-96 w-full bg-[var(--homepage-white)] fixed h-screen' >
 
-          <div className = 'border-r border-slate-300 w-96 fixed grid gap-8 bg-[var(--homepage-white)] md:py-8 md:px-8  z-10' >
+          <div className = 'md:border-r md:border-slate-300 md:w-96 w-full fixed grid gap-8 bg-[var(--homepage-white)] py-8 px-8  z-10' >       
             <h1 className = 'text-[var(--dark-blue)] text-2xl font-medium' >Messages</h1>
                 <form
                     onSubmit={searchSubmitHandler} 
-                    action=""
-                    className ='flex items-center gap-2'>
+                    action="">
                     <div>
                         <input
                             value={search}
                             onChange={(e)=>setSearch(e.target.value)}
-                            className ='text-gray-500 w-80 px-4 py-1 border rounded-md border-gray-300 bg-white focus:outline-none focus:ring-1 ' type="text"
+                            className ='text-gray-500 md:w-80 w-full px-4 py-1 border rounded-md border-gray-300 bg-white focus:outline-none focus:ring-1 ' type="text"
                             placeholder ='Search...'
                         />
 
-                        <button type='submit' className = "absolute left-80 top-25 text-gray-300  cursor-pointer">
+                        <button type='submit' className = "absolute md:left-80 md:top-25 right-9 top-25 text-gray-300  cursor-pointer">
                             <BiSearchAlt2 className = 'w-6 h-6 outline-none' />
                         </button>
                     </div>
