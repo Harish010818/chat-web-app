@@ -5,11 +5,10 @@ import MessageContainer from "./MessageContainer"
 import Sidebar from "./Sidebar"
 import { useSelector } from "react-redux";
 
-
 const HomePage = () => {
   const { authUser } = useSelector(store => store.user);
-
   return (
+
     <div className="min-h-screen bg-[var(--office-blue)] overflow-hidden md:pl-16 relative">
       {authUser !== null ? (
         <>

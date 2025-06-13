@@ -41,7 +41,7 @@ const SendInput = () => {
     return (
         <form
             onSubmit={onSubmitHandler}
-            className="fixed bottom-0 right-0 w-[918px] px-4 md:px-12 py-3 bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.1)] z-10"
+            className="fixed bottom-0 right-0 md:w-[calc(100%-448px)] w-full px-4 md:px-12 py-3 bg-white shadow-[0_-2px_8px_rgba(0,0,0,0.1)] z-10"
         >
             <div className="relative w-full max-w-screen-lg mx-auto">
                 <input
