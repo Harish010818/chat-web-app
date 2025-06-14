@@ -1,13 +1,20 @@
 import SendInput from './SendInput'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Messages from "./Messages"
 import { useEffect, useState } from 'react'
+import { GoArrowLeft } from 'react-icons/go';
+import { setSelectedUser } from '../useRedux/userSlice';
 
 const MessageContainer = () => {
+    const dispatch = useDispatch();
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 762);
 
     const { selectedUser, authUser, onlineUsers } = useSelector(store => store.user);
     const isOnline = onlineUsers?.includes(selectedUser?._id);
+
+    const backToHomePage = () => {
+        dispatch(setSelectedUser(null));
+    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -24,8 +31,14 @@ const MessageContainer = () => {
             {selectedUser !== null ?
                     (
                         <>
-                            <div className="flex items-center gap-2 shadow-gray-300 shadow  md:px-12 px-6 md:py-3 py-2 fixed bg-[var(--homepage-white)] w-full right-0 top-0 md:w-[calc(100%-448px)]">
-                                <div className="relative w-12 h-12">
+                           <div className="flex items-center gap-2 shadow-gray-300 shadow  md:px-12 px-6 md:py-3 py-2 fixed bg-[var(--homepage-white)] w-full right-0 top-0 md:w-[calc(100%-448px)]">
+                                <GoArrowLeft 
+                                   size={25} 
+                                   className={!isLargeScreen ? 'text-black' : 'hidden'}
+                                   onClick={backToHomePage} 
+                                /> 
+
+                                <div className="flex items-center relative w-12 h-12">
                                     <img
                                         src={selectedUser?.profilePhoto}
                                         alt="user-profile"
@@ -50,9 +63,9 @@ const MessageContainer = () => {
                                     </h1>
                                     <h1 className='text-2xl'>Let's start conversation...</h1>
                                 </div>
-                            </div>
-                        )
-                    )}
+                       </div>
+                    )
+               )}
         </div>
     )
 }

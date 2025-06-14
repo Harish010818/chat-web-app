@@ -15,9 +15,9 @@ const OtherUser = ({ user }) => {
         const now = moment();
         const diff = now.diff(moment(timestamp), 'days')
 
-        if(diff < 1){
-            return `${moment(timestamp).format('D/MMM/YYYY')}`;
-        }  else if(diff === 1){
+        if (diff < 1) {
+            return `${moment(timestamp).format('D MMM YYYY')}`;
+        } else if (diff === 1) {
             return `${moment(timestamp).format('D MMM YYYY')}`;
         } else {
             return moment(timestamp).format('D MMM YYYY');
@@ -39,22 +39,23 @@ const OtherUser = ({ user }) => {
                     <span className={isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : ""}></span>
                 </div>
 
-                <div className='flex'>
-                    <div>
+                <div className='flex flex-col'>
+                    <div className="flex items-center gap-36">
                         <p>{user?.fullName}</p>
-                        <p className='text-sm text-gray-500'>
-                            {user?.lastMessage?.length > 32
-                                ? user.lastMessage.slice(0, 32) + "....."
-                                : user?.lastMessage || "Hey! I am using this chatapp..."}
-                        </p>
-                </div>
-                <time className="text-xs text-gray-400 ">
-                    {
-                      user?.lastMessage
-                            ? formatTime(user.createdAt)
-                            : ''
-                    }
-                </time>                    
+                        <time className="text-xs text-gray-400 ">
+                            {
+                                user?.lastMessage
+                                    ? formatTime(user.createdAt)
+                                    : ''
+                            }
+                        </time>
+                    </div>
+
+                    <p className='text-sm text-gray-500'>
+                        {user?.lastMessage?.length > 32
+                            ? user.lastMessage.slice(0, 32) + "....."
+                            : user?.lastMessage || "Hey! I am using this chatapp..."}
+                    </p>
                 </div>
             </div>
         </>

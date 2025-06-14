@@ -12,7 +12,7 @@ const Messages = () => {
     const { messages } = useSelector(store => store.message);
 
     return (
-        <div className='md:px-12 px-2 md:mt-[75px] md:pt-8 overflow-auto gap-1 grid md:pb-24'>
+        <div className='md:px-12 px-2 mt-[75px] md:pt-8 pb-24 overflow-auto gap-1 grid'>
             {
                messages && messages?.map((message) => {
                     return (
