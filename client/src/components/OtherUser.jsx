@@ -47,7 +47,7 @@ const OtherUser = ({ user }) => {
                     </p>
                 </div>
 
-                <div className="absolute top-3 left-75">
+                <div className="absolute top-3 md:left-76 sm:left-125 left-65">
                         <time className="text-xs text-gray-400 ">
                             {
                                 user?.lastMessage
