@@ -27,7 +27,7 @@ const MessageContainer = () => {
     }, [])
 
     return (
-        <div className={(isLargeScreen && selectedUser == null)|| selectedUser !== null ?  `md:ml-96 min-h-screen grid bg-[var(--chat-bg)] md:w-[calc(100%-448px)] w-full fixed h-screen` : ``}>
+        <div className={(isLargeScreen && selectedUser == null) || selectedUser !== null ?  `md:ml-96 min-h-screen grid bg-[var(--chat-bg)] md:w-[calc(100%-448px)] w-full fixed h-screen` : ``}>
             {selectedUser !== null ?
                     (
                         <>

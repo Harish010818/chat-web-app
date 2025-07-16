@@ -28,7 +28,7 @@ const OtherUser = ({ user }) => {
         <>
             <div
                 onClick={() => selectedUserHandler(user)}
-                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex gap-4 text-black items-center hover:bg-zinc-200 py-3 cursor-pointer border-b-1 border-slate-300 pl-8`}
+                className={`${user?._id == selectedUser?._id ? "bg-zinc-200" : ""}  flex relative gap-4 text-black items-center hover:bg-zinc-200 py-3 cursor-pointer border-b-1 border-slate-300 pl-8`}
             >
                 <div className="relative w-12 h-12">
                     <img
@@ -38,10 +38,16 @@ const OtherUser = ({ user }) => {
                     />
                     <span className={isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : ""}></span>
                 </div>
-
                 <div className='flex flex-col'>
-                    <div className="flex items-center gap-36">
-                        <p>{user?.fullName}</p>
+                    <p>{user?.fullName}</p>
+                    <p className='text-sm text-gray-500'>
+                        {user?.lastMessage?.length > 32
+                            ? user.lastMessage.slice(0, 32) + "....."
+                            : user?.lastMessage || "Hey! I am using this chatapp..."}
+                    </p>
+                </div>
+
+                <div className="absolute top-3 left-75">
                         <time className="text-xs text-gray-400 ">
                             {
                                 user?.lastMessage
@@ -49,14 +55,8 @@ const OtherUser = ({ user }) => {
                                     : ''
                             }
                         </time>
-                    </div>
-
-                    <p className='text-sm text-gray-500'>
-                        {user?.lastMessage?.length > 32
-                            ? user.lastMessage.slice(0, 32) + "....."
-                            : user?.lastMessage || "Hey! I am using this chatapp..."}
-                    </p>
                 </div>
+                
             </div>
         </>
     )
