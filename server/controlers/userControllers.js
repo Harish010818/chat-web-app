@@ -2,6 +2,7 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Conversation } from "../models/conversationModel.js";
+import { getUsers, setUsers } from "../services/UserCache.js";
 
 //register handler
 export const register = async (req, res) => {
@@ -118,22 +119,7 @@ export const logout = async ( _ , res) => {
 }
 
 
-// get other users handler
-// export const otherUsers = async(req, res) => {
-//       try {
-//         const loggedInUserId = req.id;
-
-//         const otherUsers = await User.find({_id : {$ne : loggedInUserId}}).select("-password");
-
-//         return res.status(200).json(otherUsers);
-         
-//     }  catch(err) {
-//         console.error(err);
-//     }
-// }
-// to fetch all users messages  
-    
-
+// To fetch all users when somelogged in  
 export const otherUsers = async (req, res) => {
    try {
       const senderId = req.id;
@@ -141,7 +127,9 @@ export const otherUsers = async (req, res) => {
       const allUsers = await User.find({ _id: { $ne: senderId }});
 
       const users = await Promise.all(
-         allUsers.map(async (user) => {
+
+         allUsers.map( async (user) => {
+            
             const convo = await Conversation.find({
                Participants: { $all: [senderId, user._id] }
             }).populate("lastMessage");
@@ -153,15 +141,34 @@ export const otherUsers = async (req, res) => {
                 lastMessage: convo[0]?.lastMessage?.message || null,
                 createdAt : convo[0]?.lastMessage?.createdAt || null
             }
-         })
+        })
    );
 
-   users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
-    
-   return res.status(200).json(users);
+    users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+     
+    setUsers(users); // ✅ Cache the list)  
+
+    return res.status(200).json(users);
    }
-   catch (err) {
-      console.error(err);
+     catch (err) {
+     console.error(err);
    }
 }
 
+
+// Searched users list
+export const searchedUser = async (req, res) => {
+       try {
+           const query = req.params.search.toLowerCase(); // frontend se aane waali search
+           const usersList = getUsers() ; // ✅ Cache the list
+           
+           console.log(query, usersList);
+
+           // trie will be applied below
+           
+        } 
+           catch(err) {
+           console.log("errro h bhosdikeeeeeeeee")
+      
+    }
+}

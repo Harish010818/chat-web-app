@@ -6,7 +6,7 @@ export const sendMesaage = async (req, res) => {
    
    try {
       const senderId = req.id;
-      const receiverId = req.params.id;
+      const receiverId = req.params.id; 
       const { message } = req.body;
 
       if (!message) {

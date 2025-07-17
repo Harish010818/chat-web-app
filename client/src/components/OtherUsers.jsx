@@ -11,14 +11,14 @@ const OtherUsers = () => {
 
     if ( !otherUser ) return; // early return in react
     
-    console.log(otherUser);
+    //console.log(otherUser);
 
     return (
         <div className='mt-[200px] overflow-auto'>
               {
                 otherUser.map((user) => {
                         return (
-                           <OtherUser key={user._id} user={user}/>
+                            <OtherUser key={user._id} user={user}/>
                        )
                  })
               }    
