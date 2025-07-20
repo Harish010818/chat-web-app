@@ -9,21 +9,23 @@ const OtherUsers = () => {
      
     const { otherUser } = useSelector(store => store.user);
 
-    if ( !otherUser ) return; // early return in react
-    
-    //console.log(otherUser);
+    if (!otherUser) return null; // React me undefined/null handle
 
     return (
         <div className='mt-[200px] overflow-auto'>
-              {
-                otherUser.map((user) => {
-                        return (
-                            <OtherUser key={user._id} user={user}/>
-                       )
-                 })
-              }    
-       </div>
+            {
+                otherUser.length > 0 ? (
+                    otherUser.map((user) => (
+                        <OtherUser key={user._id} user={user} />
+                    ))
+                ) : (
+                    <p className='text-center text-3xl text-gray-500 mt-4'>
+                        No such user found...
+                    </p>
+                )
+            }
+        </div>
     )
 }
 
-export default OtherUsers
+export default OtherUsers;

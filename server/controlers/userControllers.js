@@ -2,27 +2,26 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { Conversation } from "../models/conversationModel.js";
-import { getUsers, setUsers } from "../services/UserCache.js";
 
 //register handler
 export const register = async (req, res) => {
     try {
-        const { fullName, username, password, confirmPassword, gender} = req.body;
+        const { fullName, username, password, confirmPassword, gender } = req.body;
 
-        if ( !fullName || !username || !password || !confirmPassword || !gender) {
+        if (!fullName || !username || !password || !confirmPassword || !gender) {
             return res.status(400).json({
                 message: "All field are required"
             })
         }
-        
-        if(password !== confirmPassword){
-            return res.status(400).json({
-               message: "Password are not matched"
-               
-           })
-       }
 
-       const user = await User.findOne({ username });
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                message: "Password are not matched"
+
+            })
+        }
+
+        const user = await User.findOne({ username });
         if (user) {
             return res.status(400).json({
                 message: "The user is already exist with this username"
@@ -32,143 +31,125 @@ export const register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const maleAvatar = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleAvatar =  `https://avatar.iran.liara.run/public/girl?username=${username}`;
+        const femaleAvatar = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
         const userData = await User.create(
             {
-                fullName, 
-                username, 
-                password : hashedPassword, 
-                profilePhoto : gender == "male" ?  maleAvatar : femaleAvatar, 
+                fullName,
+                username,
+                password: hashedPassword,
+                profilePhoto: gender == "male" ? maleAvatar : femaleAvatar,
                 gender
             }
         )
-    
+
 
         return res.status(200).json({
-            success : true,
-            message : "Account created successfully",
+            success: true,
+            message: "Account created successfully",
             userData
-        }) 
+        })
 
-    } catch(err) {
+    } catch (err) {
         console.error(err);
     }
 }
 
 
 // login handler
-export const login = async(req, res) => {
+export const login = async (req, res) => {
     try {
-       const {username, password} = req.body;
+        const { username, password } = req.body;
 
-       if( !username || !password ){
+        if (!username || !password) {
             return res.status(400).json({
-                message : "All field are required"
+                message: "All field are required"
             })
-       }
+        }
 
-       const user = await User.findOne({ username });
-        
-       let isPswdMatch = 0;
+        const user = await User.findOne({ username });
 
-       if(user)isPswdMatch = await bcrypt.compare(password, user.password);   
+        let isPswdMatch = 0;
 
-       if(!isPswdMatch || !user){
+        if (user) isPswdMatch = await bcrypt.compare(password, user.password);
+
+        if (!isPswdMatch || !user) {
             return res.status(400).json({
                 message: "Incorrect Password or username"
             })
-       }
+        }
 
-        
-      const token = jwt.sign({ userId : user._id}, process.env.SECRET_KEY, { expiresIn: '1d' });
-      
-      return res.status(200)
+
+        const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+
+        return res.status(200)
             .cookie("token", token, {
-                httpOnly : true,
-                secure : true,
-                sameSite : "none",
-                maxAge : 24 * 60 * 60 * 1000   
-            }) 
+                httpOnly: true,
+                secure: true,
+                sameSite: "none",
+                maxAge: 24 * 60 * 60 * 1000
+            })
             .json({
-                message: "Login successfully",  
+                message: "Login successfully",
                 _id: user._id,
                 username: user.username,
                 fullName: user.fullName,
                 profilePhoto: user.profilePhoto
             })
-     
-    }  catch(err){
-        console.error(err); 
-    } 
-} 
+
+    } catch (err) {
+        console.error(err);
+    }
+}
 
 
 // user logout handler
-export const logout = async ( _ , res) => {
+export const logout = async (_, res) => {
     try {
         return res.status(200)
-                  .cookie("token", " ", {maxAge: 0 })
-                  .json({
-                    message : "logged out successfully"
-                }) 
+            .cookie("token", " ", { maxAge: 0 })
+            .json({
+                message: "logged out successfully"
+            })
     }
-    catch(err){
+    catch (err) {
         console.error(err);
-    }  
+    }
 }
 
 
 // To fetch all users when somelogged in  
 export const otherUsers = async (req, res) => {
-   try {
-      const senderId = req.id;
-    
-      const allUsers = await User.find({ _id: { $ne: senderId }});
+    try {
+        const senderId = req.id;
 
-      const users = await Promise.all(
+        const allUsers = await User.find({ _id: { $ne: senderId } });
 
-         allUsers.map( async (user) => {
-            
-            const convo = await Conversation.find({
-               Participants: { $all: [senderId, user._id] }
-            }).populate("lastMessage");
+        const users = await Promise.all(
 
-            return  {
-                _id: user._id,
-                fullName: user.fullName,
-                profilePhoto: user.profilePhoto,
-                lastMessage: convo[0]?.lastMessage?.message || null,
-                createdAt : convo[0]?.lastMessage?.createdAt || null
-            }
-        })
-   );
+            allUsers.map(async (user) => {
 
-    users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
-     
-    setUsers(users); // ✅ Cache the list)  
+                const convo = await Conversation.find({
+                    Participants: { $all: [senderId, user._id] }
+                }).populate("lastMessage");
 
-    return res.status(200).json(users);
-   }
-     catch (err) {
-     console.error(err);
-   }
-}
+                return {
+                    _id: user._id,
+                    fullName: user.fullName,
+                    profilePhoto: user.profilePhoto,
+                    lastMessage: convo[0]?.lastMessage?.message || null,
+                    createdAt: convo[0]?.lastMessage?.createdAt || null
+                }
+            })
+        );
 
+        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
 
-// Searched users list
-export const searchedUser = async (req, res) => {
-       try {
-           const query = req.params.search.toLowerCase(); // frontend se aane waali search
-           const usersList = getUsers() ; // ✅ Cache the list
-           
-           console.log(query, usersList);
-
-           // trie will be applied below
-           
-        } 
-           catch(err) {
-           console.log("errro h bhosdikeeeeeeeee")
-      
+        return res.status(200).json(users);
+    }
+    catch (err) {
+        console.error(err);
     }
 }
+
+
