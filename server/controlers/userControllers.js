@@ -117,12 +117,29 @@ export const logout = async (_, res) => {
     }
 }
 
+// my profile information
+export const getMyProfile = async (req, res) => {
+        try {
+            const myId = req.id;
+            const myProfile = await User.findById(myId);
+             
+            if (!myProfile) return res.status(200).json("User not found 404");
+
+            return res.status(200).json({
+                success : true,   
+                myProfile
+            })
+        }
+        catch(err) {
+            console.log(err); 
+   } 
+}
+
 
 // To fetch all users when somelogged in  
 export const otherUsers = async (req, res) => {
     try {
         const senderId = req.id;
-
         const allUsers = await User.find({ _id: { $ne: senderId } });
 
         const users = await Promise.all(

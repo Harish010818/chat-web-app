@@ -26,7 +26,7 @@ const Login = () => {
     );
 
     if(res){
-        navigate("/");
+        navigate("/home");
         toast.success(res.data.message);
         dispatch(setAuthUser(res.data));
     }
@@ -65,7 +65,7 @@ const Login = () => {
               type="password"
               placeholder='Password' />
           </div>
-            <button type="submit" className="text-white w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-[var(--dark-blue)]">Login</button>
+            <button type="submit" className="text-white w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 bg-[var(--dark-blue)] cursor-pointer">Login</button>
           <p className='text-center my-2'>Don't have an account? <Link to="/signup" className='text-[var(--dark-blue)]' > signup </Link></p>
           <div>
           </div>
