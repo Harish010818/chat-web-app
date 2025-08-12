@@ -1,16 +1,16 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import Signup from "./components/Signup"
-import Login from "./components/Login"
-import HomePage from "./components/HomePage"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect } from "react"
 import io from "socket.io-client"
 import { setSocket } from "./useRedux/socketSlice"
 import { setAuthUser, setLoader, setOnlineUsers } from "./useRedux/userSlice"
-import ProtectRoute from "./components/protectRoute/ProtectRoute"
-import LandingPage from "./components/LandingPage"
 import axios from "axios"
-import LayoutLoader from "./components/Layout/Loader"
+import LandingPage from "./pages/LandingPage"
+import LoginPage from "./pages/LoginPage"
+import SignupPage from "./pages/SignupPage"
+import HomePage from "./pages/HomePage"
+import ProtectRoute from "./protectRoute/ProtectRoute"
+import LayoutLoader from "./components/shared/Loader"
 
 
 function App() {
@@ -86,12 +86,12 @@ function App() {
 
     {
       path: "/login",
-      element: <Login />
+      element: <LoginPage />
     },
 
     {
       path: "/signup",
-      element: <Signup />
+      element: <SignupPage />
     },
 
     {

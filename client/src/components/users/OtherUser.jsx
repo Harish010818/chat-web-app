@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedUser } from '../useRedux/userSlice';
-import moment from "moment";
+import { setSelectedUser } from '../../useRedux/userSlice';
+import { SidebarTimeFormat } from "../../utils/TimeFormat";
 const OtherUser = ({ user }) => {
 
     const dispatch = useDispatch();
@@ -9,19 +9,6 @@ const OtherUser = ({ user }) => {
 
     const selectedUserHandler = (user) => {
         dispatch(setSelectedUser(user));
-    }
-
-    const formatTime = (timestamp) => {
-        const now = moment();
-        const diff = now.diff(moment(timestamp), 'days')
-
-        if (diff < 1) {
-            return `${moment(timestamp).format('D MMM YYYY')}`;
-        } else if (diff === 1) {
-            return `${moment(timestamp).format('D MMM YYYY')}`;
-        } else {
-            return moment(timestamp).format('D MMM YYYY');
-        }
     }
 
     return (
@@ -51,7 +38,7 @@ const OtherUser = ({ user }) => {
                         <time className="text-xs text-gray-400 ">
                             {
                                 user?.lastMessage
-                                    ? formatTime(user.createdAt)
+                                    ? SidebarTimeFormat(user.createdAt)
                                     : ''
                             }
                         </time>

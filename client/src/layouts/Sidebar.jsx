@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BiSearchAlt2 } from "react-icons/bi";
 import { useDispatch, useSelector } from 'react-redux';
-import OtherUsers from './OtherUsers';
+import OtherUsers from '../components/users/OtherUsers';
 import { setOtherUser } from '../useRedux/userSlice';
 import toast from 'react-hot-toast';
 import axios from 'axios';

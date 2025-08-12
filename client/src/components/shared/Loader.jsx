@@ -8,7 +8,7 @@ const LayoutLoader  = () => {
 }
 
 
-export default LayoutLoader ;
+export default LayoutLoader;
 
 
 

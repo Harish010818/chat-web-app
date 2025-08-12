@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
-import LayoutLoader from '../Layout/Loader';
+import LayoutLoader from '../components/shared/Loader';
 
 const ProtectRoute = ({ children }) => {
     const { authUser, loader } = useSelector((state) => state.user);

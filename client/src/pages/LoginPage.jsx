@@ -5,7 +5,7 @@ import toast from "react-hot-toast"
 import axios from "axios";
 import { setAuthUser } from '../useRedux/userSlice';
 
-const Login = () => {
+const LoginPage = () => {
   const [user, setUser] = useState({
       username : "",
       password : "",
@@ -75,4 +75,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default LoginPage;

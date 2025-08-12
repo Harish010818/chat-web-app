@@ -79,3 +79,53 @@ export const receiveMessage = async (req, res) => {
 }
 
 
+export const editMessage = async(req, res) => {
+     try {
+        const messageId = req.params._id;
+        const { message } = req.body;
+        const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: message}, {new: true, runValidators: true});
+
+        res.status(200).json({
+            success : true,
+            updatedMessage
+        }) 
+
+     } catch(err){
+        console.error(err);
+     }
+}
+
+
+
+export const unsendMessage = async(req, res) => {
+   try {
+      const messageId = req.params.id;
+      await Message.findOneAndDelete({ _id: messageId });
+      
+      res.status(200).json({
+         success: true,
+         message: "Message unsent successfully"
+      });
+      
+     } catch(err){
+        console.error(err);
+     }
+   }
+
+
+   // export const deleteMessage = async(req, res) => {
+   //      try {
+   //        const messageId = req.params._id;
+   //        const message =  await Message.findByIdAndUpdate(messageId, {});
+   //        message.message = "this message was deleted."
+   //        Message.save();
+   
+   //        res.status(200).json({
+   //            success: true,
+   //            message: "Message deleted successfully"
+   //        });  
+   
+   //      } catch(err){
+   //         console.error(err);
+   //      }
+   // }
