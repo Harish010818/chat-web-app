@@ -19,7 +19,6 @@ export const useGetOtherUsers = () => {
 
                 );
                 
-                console.log(res.data);
                 dispatch(setOtherUser(res.data));  
                 }
                 catch(err){

@@ -7,11 +7,13 @@ import EditMsgContext from "../../context/EditMsgContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { removeMessage } from "../../useRedux/messageSlice";
+import { setMessageDelete } from "../../useRedux/messageSlice";
 
 const MessageMenu = ({ ref, message, authUserId, activeMessageId }) => {
   const { setMessageEditOpen, setMessage, setInput } = useContext(EditMsgContext);
+
   const dispatch = useDispatch();
+
   const handleEdit = () => {
     setMessageEditOpen(true);
     setMessage(message);
@@ -20,6 +22,8 @@ const MessageMenu = ({ ref, message, authUserId, activeMessageId }) => {
   }
 
   const handleUnsend = async () => {
+    dispatch(setMessageDelete(false));
+
     try {
       const res = await axios.delete(`${import.meta.env.VITE_API_URL}/api/v1/message/${activeMessageId}`,
         {
@@ -28,14 +32,14 @@ const MessageMenu = ({ ref, message, authUserId, activeMessageId }) => {
       )
 
       if (res.data.success) {
-          dispatch(removeMessage(activeMessageId));
+          dispatch(setMessageDelete(true));
           toast.success(res.data?.message);  
+        }
+        
+      } catch (error) {
+        toast.error(error.response?.data?.message);
+        console.error(error);
       }
-
-    } catch (error) {
-      toast.error(error.response?.data?.message);
-      console.error(error);
-    }
   };
 
   return (
