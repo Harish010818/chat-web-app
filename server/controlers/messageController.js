@@ -80,15 +80,13 @@ export const receiveMessage = async (req, res) => {
 
 
 export const editMessage = async(req, res) => {
-     try {
-        const messageId = req.params._id;
-        const { message } = req.body;
-        const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: message}, {new: true, runValidators: true});
 
-        res.status(200).json({
-            success : true,
-            updatedMessage
-        }) 
+     try {
+        const messageId = req.params.id;
+        const { input } = req.body;
+        const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: input}, {new: true, runValidators: true});
+        
+        res.status(200).json({ success : true}) 
 
      } catch(err){
         console.error(err);

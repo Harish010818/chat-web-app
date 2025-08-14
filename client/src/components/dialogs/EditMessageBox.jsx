@@ -4,10 +4,16 @@ import TimeFormat from "../../utils/TimeFormat";
 import { MdCheckCircle } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import EditMsgContext from "../../context/EditMsgContext";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setMessageDelete } from "../../useRedux/messageSlice";
 
 
 const Modal = ({ children }) => {
   const { message, setMessage, setMessageEditOpen, input, setInput, inputRef } = useContext(EditMsgContext);
+  const dispatch = useDispatch();
+
   const onclose = () => {
     setMessageEditOpen(false);
     setInput("");
@@ -21,8 +27,26 @@ const Modal = ({ children }) => {
   }, []);
 
 
-  const editMsgHandler = () => {
-        console.log("we are gonnaa edit this") 
+  const editMsgHandler = async () => {
+
+    try {
+      dispatch(setMessageDelete(false));
+      const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/message/${message._id}`,
+        { input },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          withCredentials: true
+        });
+
+      if (res.data.success) {
+        dispatch(setMessageDelete(true));
+        setMessageEditOpen(false);
+        toast.success("Harish is absolute beast");
+      }
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return ReactDOM.createPortal(
