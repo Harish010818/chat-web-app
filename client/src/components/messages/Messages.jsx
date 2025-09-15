@@ -1,14 +1,32 @@
 import Message from './Message'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetMessages } from '../../hooks/useGetMessages';
-import  useGetRealTimeMessage  from '../../hooks/useGetRealTimeMessage';
+import useGetRealTimeMessage from '../../hooks/useGetRealTimeMessage';
+import { unsendMessage } from '../../useRedux/messageSlice';
+import { useEffect } from 'react';
+
 
 const Messages = () => {
 
+    const dispatch = useDispatch();
     const [activeMessageId, setActiveMessageId] = useState(null);
+    const { socket } = useSelector(store => store.socket);
 
-    useGetMessages(); 
+    useEffect(() => {
+        if (!socket) return;
+        
+        socket.on("messageDeleted", (id) => {
+            dispatch(unsendMessage(id)); 
+        });
+
+        return () => {
+            socket.off("messageDeleted");
+        };
+    }, [socket, dispatch])
+
+
+    useGetMessages();
     useGetRealTimeMessage()
 
     const { messages } = useSelector(store => store.message);
@@ -23,11 +41,11 @@ const Messages = () => {
             {
                 messages && messages?.map((message) => {
                     return (
-                        <Message 
-                            key={message._id} 
+                        <Message
+                            key={message._id}
                             message={message}
-                            activeMessageId={activeMessageId} 
-                            setActiveMessageId={setActiveMessageId} 
+                            activeMessageId={activeMessageId}
+                            setActiveMessageId={setActiveMessageId}
                         />
                     )
                 })

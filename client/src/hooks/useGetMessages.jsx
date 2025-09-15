@@ -1,13 +1,11 @@
 import axios from "axios"
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { setMessages } from "../useRedux/messageSlice";
 
 export const useGetMessages = () => {
 
     const { selectedUser } = useSelector(store => store.user);
-    const { messageDelete } = useSelector(store => store.message);
-    const prevUserId = useRef(null);
     
     const dispatch = useDispatch();
     
@@ -28,16 +26,7 @@ export const useGetMessages = () => {
             }
         }
         
-        const isUserChanged = prevUserId.current !== selectedUser?._id;
+       fetchMessages();
         
-        if(!isUserChanged && !messageDelete){
-           return;
-        }
-        
-        if(isUserChanged || messageDelete){
-           fetchMessages();
-           prevUserId.current=selectedUser?._id; 
-        }
-        
-    }, [selectedUser?._id, messageDelete])
+    }, [selectedUser?._id])
 }

@@ -84,7 +84,17 @@ export const editMessage = async(req, res) => {
      try {
         const messageId = req.params.id;
         const { input } = req.body;
+        
+        const message = await Message.findById(messageId);
+        const { receiverId } = message; 
+
         const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: input}, {new: true, runValidators: true});
+
+        const receiverSocketId = getReceiverSocketId(receiverId);
+
+        if(receiverSocketId) {
+           io.to(receiverSocketId).emit('messageUpdated', messageId);
+        }
         
         res.status(200).json({ success : true}) 
 
@@ -98,8 +108,17 @@ export const editMessage = async(req, res) => {
 export const unsendMessage = async(req, res) => {
    try {
       const messageId = req.params.id;
+      const message = await Message.findById(messageId);
+      const { receiverId } = message; 
+
       await Message.findOneAndDelete({ _id: messageId });
-      
+     
+      const receiverSocketId = getReceiverSocketId(receiverId);
+
+      if(receiverSocketId) {
+         io.to(receiverSocketId).emit('messageDeleted', messageId);
+      }
+
       res.status(200).json({
          success: true,
          message: "Message unsent successfully"
@@ -109,6 +128,12 @@ export const unsendMessage = async(req, res) => {
         console.error(err);
      }
    }
+
+
+
+
+
+
 
 
    // export const deleteMessage = async(req, res) => {

@@ -7,7 +7,6 @@ import EditMsgContext from "../../context/EditMsgContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { setMessageDelete } from "../../useRedux/messageSlice";
 
 
 const Modal = ({ children }) => {
@@ -30,7 +29,6 @@ const Modal = ({ children }) => {
   const editMsgHandler = async () => {
 
     try {
-      dispatch(setMessageDelete(false));
       const res = await axios.put(`${import.meta.env.VITE_API_URL}/api/v1/message/${message._id}`,
         { input },
         {
@@ -39,9 +37,8 @@ const Modal = ({ children }) => {
         });
 
       if (res.data.success) {
-        dispatch(setMessageDelete(true));
         setMessageEditOpen(false);
-        toast.success("Harish is absolute beast");
+        toast.success("Message edited successfully");
       }
 
     } catch (error) {

@@ -1,4 +1,5 @@
 import { AiOutlineLogout } from "react-icons/ai";
+import { FaUserCircle, FaCamera } from "react-icons/fa";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,7 @@ export const Logout = () => {
     const navigate = useNavigate();
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
 
-    const { selectedUser } = useSelector(store => store.user);
+    const { authUser, selectedUser } = useSelector(store => store.user);
 
     useEffect(() => {
         const handleResize = () => {
@@ -23,6 +24,41 @@ export const Logout = () => {
 
         return () => window.removeEventListener("resize", handleResize);
     }, []);
+
+
+    const uploadImgHandler = async (e) => {
+        e.preventDefault();
+        console.log("request come here")
+
+        const file = e.target.files[0]; // user-selected file
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append("profilePhoto", file);
+        console.log([...formData]);
+
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_API_URL}/api/v1/user/upload-profile/${authUser._id}`,
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+
+            if (res) {
+                toast.success("Profile photo updated successfully");
+                console.log(res.data);
+                dispatch(setAuthUser(res.data));
+            }
+        } catch (err) {
+            toast.error("Failed to upload image");
+            console.error("Upload failed:", err);
+        }
+    };
+
 
     const logoutHandler = async () => {
         try {
@@ -49,6 +85,32 @@ export const Logout = () => {
 
     return (
         <>
+            <input
+                type="file"
+                accept="image/*"
+                onChange={uploadImgHandler}
+                className="hidden"
+                id="profileUpload"
+            />
+
+            <label htmlFor="profileUpload" className="absolute w-12 h-12 top-3 left-2 cursor-pointer group">
+                {authUser?.profilePhoto ? (
+                    <img
+                        src={`${import.meta.env.VITE_API_URL}${authUser?.profilePhoto}`}
+                        alt="user-profile"
+                        className="w-full h-full object-fit rounded-full border-2 border-gray-300 shadow-md"
+                    />
+                ) : (
+                    <div className="w-full h-full rounded-full border-2 border-gray-300 shadow-md bg-white flex items-center justify-center relative">
+                        <FaUserCircle className="w-12 h-12 text-gray-400" />
+
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <FaCamera className="w-5 h-5 text-white" />
+                        </div>
+                    </div>
+                )}
+            </label>
+
             {shouldShowLogout && (
                 <div className="md:text-white text-[var(--office-blue)] absolute md:bottom-5 md:left-3 md:top-auto md:right-auto z-10 right-4 top-8">
                     <div className="group relative cursor-pointer">

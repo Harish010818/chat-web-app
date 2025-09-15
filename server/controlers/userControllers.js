@@ -30,15 +30,12 @@ export const register = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const maleAvatar = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-        const femaleAvatar = `https://avatar.iran.liara.run/public/girl?username=${username}`;
-
         const userData = await User.create(
             {
                 fullName,
                 username,
                 password: hashedPassword,
-                profilePhoto: gender == "male" ? maleAvatar : femaleAvatar,
+                profilePhoto: "",
                 gender
             }
         )
@@ -168,5 +165,21 @@ export const otherUsers = async (req, res) => {
         console.error(err);
     }
 }
+
+
+    export const uploadFile = async (req, res) => {
+        try {
+            const userId = req.params.id;
+            const user = await User.findByIdAndUpdate(
+                userId, 
+                {profilePhoto :  `/uploads/${req.file.filename}`},
+                {new : true}
+            )
+            
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: "Upload failed" });
+    } 
+    }     
 
 
