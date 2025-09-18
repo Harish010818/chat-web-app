@@ -7,6 +7,7 @@ import EditMsgContext from "../../context/EditMsgContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { editMessage } from "../../useRedux/messageSlice";
 
 
 const Modal = ({ children }) => {
@@ -38,6 +39,7 @@ const Modal = ({ children }) => {
 
       if (res.data.success) {
         setMessageEditOpen(false);
+        dispatch(editMessage({ id: message._id, newText: input }));
         toast.success("Message edited successfully");
       }
 

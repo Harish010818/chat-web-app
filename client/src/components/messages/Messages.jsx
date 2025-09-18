@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
 import { useGetMessages } from '../../hooks/useGetMessages';
 import useGetRealTimeMessage from '../../hooks/useGetRealTimeMessage';
-import { unsendMessage } from '../../useRedux/messageSlice';
+import { editMessage, unsendMessage } from '../../useRedux/messageSlice';
 import { useEffect } from 'react';
 
 
@@ -17,13 +17,24 @@ const Messages = () => {
         if (!socket) return;
         
         socket.on("messageDeleted", (id) => {
-            dispatch(unsendMessage(id)); 
+            dispatch(unsendMessage(id));
         });
-
+        
         return () => {
             socket.off("messageDeleted");
         };
     }, [socket, dispatch])
+    
+    
+    useEffect(() => {
+        if (!socket) return;
+        
+        socket.on("messageEdited", ({ id, newText }) => {
+            dispatch(editMessage({ id, newText }));
+        });
+
+        return () => socket.off("messageEdited");
+    }, [socket, dispatch]);
 
 
     useGetMessages();

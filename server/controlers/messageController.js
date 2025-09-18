@@ -91,10 +91,13 @@ export const editMessage = async(req, res) => {
         const updatedMessage = await Message.findByIdAndUpdate(messageId, {message: input}, {new: true, runValidators: true});
 
         const receiverSocketId = getReceiverSocketId(receiverId);
-
-        if(receiverSocketId) {
-           io.to(receiverSocketId).emit('messageUpdated', messageId);
-        }
+        
+         if (receiverSocketId) {
+            io.to(receiverSocketId).emit("messageEdited", {
+            id: updatedMessage._id,
+            newText: updatedMessage.message,
+            });
+         }
         
         res.status(200).json({ success : true}) 
 

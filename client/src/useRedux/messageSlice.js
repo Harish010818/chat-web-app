@@ -13,9 +13,16 @@ const messageSlice = createSlice({
     },
     unsendMessage: (state, action) => {
       state.messages = state.messages.filter(msg => msg._id !== action.payload);
+    },
+
+    editMessage: (state, action) => {
+      const { id, newText } = action.payload;
+      state.messages = state.messages.map((msg) =>
+        msg._id === id ? { ...msg, message: newText} : msg
+      );
     }
   }
 });
 
-export const { setMessages, unsendMessage } = messageSlice.actions;
+export const { setMessages, editMessage, unsendMessage } = messageSlice.actions;
 export default messageSlice;

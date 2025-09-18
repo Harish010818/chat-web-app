@@ -62,7 +62,7 @@ function App() {
       });
 
       return () => {
-        socketio.off('getOnlineUsers'); // Prevent multiple listeners
+        socketio.off('getOnlineUsers'); //Prevent multiple listeners
         socketio.close();
       };
     }
