@@ -22,7 +22,7 @@ const OtherUser = ({ user }) => {
                 <div className="relative w-12 h-12">
                     {user?.profilePhoto ? (
                         <img
-                            src={`${import.meta.env.VITE_API_URL}${user?.profilePhoto}`}
+                            src={`${user?.profilePhoto}`}
                             alt="user-profile"
                             className="w-full h-full object-fit rounded-full border-2 border-gray-300 shadow-md"
                         />

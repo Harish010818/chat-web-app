@@ -28,14 +28,13 @@ export const Logout = () => {
 
     const uploadImgHandler = async (e) => {
         e.preventDefault();
-        console.log("request come here")
 
-        const file = e.target.files[0]; // user-selected file
+        const file = e.target.files[0]; //user-selected file
         if (!file) return;
 
         const formData = new FormData();
+
         formData.append("profilePhoto", file);
-        console.log([...formData]);
 
         try {
             const res = await axios.post(
@@ -50,7 +49,6 @@ export const Logout = () => {
 
             if (res) {
                 toast.success("Profile photo updated successfully");
-                console.log(res.data);
                 dispatch(setAuthUser(res.data));
             }
         } catch (err) {
@@ -96,7 +94,7 @@ export const Logout = () => {
             <label htmlFor="profileUpload" className="absolute w-12 h-12 top-3 left-2 cursor-pointer group">
                 {authUser?.profilePhoto ? (
                     <img
-                        src={`${import.meta.env.VITE_API_URL}${authUser?.profilePhoto}`}
+                        src={`${authUser?.profilePhoto}`}
                         alt="user-profile"
                         className="w-full h-full object-fit rounded-full border-2 border-gray-300 shadow-md"
                     />

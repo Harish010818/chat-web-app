@@ -116,20 +116,20 @@ export const logout = async (_, res) => {
 
 // my profile information
 export const getMyProfile = async (req, res) => {
-        try {
-            const myId = req.id;
-            const myProfile = await User.findById(myId);
-             
-            if (!myProfile) return res.status(200).json("User not found 404");
+    try {
+        const myId = req.id;
+        const myProfile = await User.findById(myId);
 
-            return res.status(200).json({
-                success : true,   
-                myProfile
-            })
-        }
-        catch(err) {
-            console.log(err); 
-   } 
+        if (!myProfile) return res.status(200).json("User not found 404");
+
+        return res.status(200).json({
+            success: true,
+            myProfile
+        })
+    }
+    catch (err) {
+        console.log(err);
+    }
 }
 
 
@@ -157,7 +157,7 @@ export const otherUsers = async (req, res) => {
             })
         );
 
-        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); 
+        users.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
         return res.status(200).json(users);
     }
@@ -167,19 +167,28 @@ export const otherUsers = async (req, res) => {
 }
 
 
-    export const uploadFile = async (req, res) => {
-        try {
-            const userId = req.params.id;
-            const user = await User.findByIdAndUpdate(
-                userId, 
-                {profilePhoto :  `/uploads/${req.file.filename}`},
-                {new : true}
-            )
-            
+export const uploadFile = async (req, res) => {
+    
+    try {
+        if (!req.file) {
+            res.status(400).json({
+                message: 'No file Uploaded. '
+            })
+        }
+
+        const userId = req.params.id;
+        const uploadedFileUrl = req.file.path;
+
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { profilePhoto: uploadedFileUrl },
+            { new: true }
+        )
+
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: "Upload failed" });
-    } 
-    }     
+    }
+}
 
 

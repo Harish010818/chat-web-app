@@ -14,7 +14,7 @@ const ChatHeader = ({ isOnline, isLargeScreen, backToHomePage, selectedUser }) =
             <div className="flex items-center relative w-12 h-12">
                 {selectedUser?.profilePhoto ? (
                     <img
-                        src={`${import.meta.env.VITE_API_URL}${selectedUser?.profilePhoto}`}
+                        src={`${selectedUser?.profilePhoto}`}
                         alt="user-profile"
                         className="w-full h-full object-fit rounded-full border-2 border-gray-300 shadow-md"
                     />

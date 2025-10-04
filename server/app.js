@@ -7,9 +7,10 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { app, server } from "./socket/socket.js";
 import bodyParser from "body-parser";
+
+
 dotenv.config();
 connectDB();
-
 
 // middleware
 app.use(express.json()); 
@@ -17,8 +18,6 @@ app.use(bodyParser.urlencoded({extended : true}));
 app.use(cookieParser());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true}));
 
-// ✅ serve uploads folder publicly
-app.use("/uploads", express.static("uploads"));
 
 // routes
 app.use("/api/v1/user", userRoute); 
