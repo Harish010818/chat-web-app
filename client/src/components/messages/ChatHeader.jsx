@@ -4,7 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 const ChatHeader = ({ isOnline, isLargeScreen, backToHomePage, selectedUser }) => {
     return (
-        <div className="flex items-center gap-2 shadow-gray-300 shadow  md:px-12 px-6 md:py-3 py-2 fixed bg-[var(--homepage-white)] w-full right-0 top-0 md:w-[calc(100%-448px)]">
+        <div className="flex items-center gap-2 shadow-gray-300 shadow  md:px-12 px-6 md:py-3 py-2 fixed md:bg-[var(--homepage-white)] bg-blue-500 w-full right-0 top-0 md:w-[calc(100%-448px)]">
             <GoArrowLeft
                 size={25}
                 className={!isLargeScreen ? 'text-black' : 'hidden'}

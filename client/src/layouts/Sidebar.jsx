@@ -47,7 +47,7 @@ const Sidebar = () => {
     return (
         <div className='md:border-r md:border-slate-300 grid md:w-96 w-full bg-[var(--homepage-white)] fixed h-screen' >
 
-            <div className='md:border-r md:border-slate-300 md:w-96 w-full fixed grid gap-8 bg-[var(--homepage-white)] py-8 px-8  z-10' >
+            <div className='md:border-r md:border-slate-300 md:w-96 w-full fixed grid gap-8 md:bg-[var(--homepage-white)] bg-blue-500 py-4 px-8  z-10' >
                 <h1 className='text-[var(--rich-black)] text-2xl font-medium' >Messages</h1>
                 <div>
                     <input
@@ -59,7 +59,7 @@ const Sidebar = () => {
                     />
                     <button
                         onClick={() => inputRef.current?.focus()}
-                        className="absolute md:left-80 md:top-25 right-9 top-25 text-gray-300  cursor-pointer">
+                        className="absolute md:left-80  right-9 top-21 text-gray-300  cursor-pointer">
                         <BiSearchAlt2 className='w-6 h-6 outline-none' />
                     </button>
                 </div>
