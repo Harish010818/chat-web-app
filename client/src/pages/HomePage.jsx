@@ -17,7 +17,7 @@ const HomePage = () => {
   const inputRef = useRef(null);
 
   return (
-    <div className="min-h-screen bg-[var(--office-blue)] overflow-hidden md:pl-16 relative">
+    <div className="min-h-screen bg-blue-500 overflow-hidden md:pl-16 relative">
       <>
         <EditMsgContext.Provider value={
         { 

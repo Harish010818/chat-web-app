@@ -1,5 +1,6 @@
 import { AiOutlineLogout } from "react-icons/ai";
 import { FaUserCircle, FaCamera } from "react-icons/fa";
+import { BsThreeDotsVertical } from "react-icons/bs";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -112,7 +113,7 @@ export const Logout = () => {
             {shouldShowLogout && (
                 <div className="md:text-white text-[var(--office-blue)] absolute md:bottom-5 md:left-3 md:top-auto md:right-auto z-10 right-4 top-8">
                     <div className="group relative cursor-pointer">
-                        <div className="absolute left-14 top-2 z-10 bg-[var(--office-blue)] bg-opacity-70 text-[var(--homepage-white)] text-xs font-semibold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                        <div className="absolute left-14 top-2 z-10 bg-[var(--rich-black)] bg-opacity-70 text-[var(--homepage-white)] text-xs font-semibold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                             Logout
                         </div>
 
@@ -125,6 +126,11 @@ export const Logout = () => {
                     </div>
                 </div>
             )}
+        
+
+
         </>
     );
 };
+
+{/* <BsThreeDotsVertical /> */}

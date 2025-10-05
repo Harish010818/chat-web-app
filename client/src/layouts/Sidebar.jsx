@@ -48,7 +48,7 @@ const Sidebar = () => {
         <div className='md:border-r md:border-slate-300 grid md:w-96 w-full bg-[var(--homepage-white)] fixed h-screen' >
 
             <div className='md:border-r md:border-slate-300 md:w-96 w-full fixed grid gap-8 bg-[var(--homepage-white)] py-8 px-8  z-10' >
-                <h1 className='text-[var(--dark-blue)] text-2xl font-medium' >Messages</h1>
+                <h1 className='text-[var(--rich-black)] text-2xl font-medium' >Messages</h1>
                 <div>
                     <input
                         ref={inputRef}

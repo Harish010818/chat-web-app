@@ -47,8 +47,8 @@ const SignupPage = () => {
     })
   }
   return (
-    <div className='min-h-screen flex items-center justify-center bg-[var(--office-blue)] px-4'>
-      <div className="text-black w-full max-w-md bg-[var(--office-white)] shadow-xl p-8 space-y-6">
+    <div className='min-h-screen flex items-center justify-center bg-blue-500 px-4'>
+      <div className="text-black w-full max-w-md bg-[var(--office-white)] shadow-xl p-8 space-y-6 rounded-2xl">
         <h1 className='text-3xl font-bold text-center text-gray-800'>Signup</h1>
         <form onSubmit={onSubmitHandler} className="space-y-4">
           <div>
@@ -56,7 +56,7 @@ const SignupPage = () => {
               // name="fullName"
               value={user.fullName}
               onChange={(e) => setUser({ ...user, fullName: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="text"
               placeholder='Full Name' />
           </div>
@@ -65,7 +65,7 @@ const SignupPage = () => {
               // name="username"
               value={user.username}
               onChange={(e) => setUser({ ...user, username: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="text"
               placeholder='Username' />
           </div>
@@ -74,7 +74,7 @@ const SignupPage = () => {
               // name="password"
               value={user.password}
               onChange={(e) => setUser({ ...user, password: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="password"
               placeholder='Password' />
             {/* <span className="absolute right-3 top-3 text-gray-500 cursor-pointer">
@@ -86,7 +86,7 @@ const SignupPage = () => {
               // name="confirmPassword"
               value={user.confirmPassword}
               onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
-              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
               type="password"
               placeholder='Confirm Password' />
             {/* <span className="absolute right-3 top-3 text-gray-500 cursor-pointer">
@@ -99,7 +99,7 @@ const SignupPage = () => {
                 type="checkbox"
                 checked={user.gender === "male"}
                 onChange={() => handleCheckbox("male")}
-                className="peer appearance-none w-5 h-5 border border-gray-400 rounded bg-white checked:bg-[var(--dark-blue)]"
+                className="peer appearance-none w-5 h-5 border border-gray-400 rounded bg-white checked:bg-[var(--rich-black)]"
               />
 
               {/* Blue Tick shown only when checked */}
@@ -114,7 +114,7 @@ const SignupPage = () => {
                 type="checkbox"
                 checked={user.gender === "female"}
                 onChange={() => handleCheckbox("female")}
-                className="peer appearance-none w-5 h-5 border border-gray-400 rounded bg-white checked:bg-[var(--dark-blue)]"
+                className="peer appearance-none w-5 h-5 border border-gray-400 rounded bg-white checked:bg-[var(--rich-black)]"
               />
               <svg className="absolute w-4 h-4 text-[var(--office-white)] opacity-0 peer-checked:opacity-100 left-0.5 top-0.5 pointer-events-none" fill="none" stroke="currentColor" strokeWidth="4" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -126,7 +126,7 @@ const SignupPage = () => {
           <div>
             <button
               type='submit'
-              className="text-white w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2  bg-[var(--dark-blue)]">
+              className="text-white w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2  bg-[var(--rich-black)]">
               Signup
             </button>
           </div>

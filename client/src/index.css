@@ -5,7 +5,8 @@
   --office-white: #FEFEFE; 
   --dark-blue: #0A74CA;
   --homepage-white: #FFFFFF;  
-  --chat-bg: #F6F8FC; 
+  --chat-bg: #F6F8FC;
+  --rich-black: #060A11; 
 
 
 
@@ -68,6 +69,17 @@ body {
   border-radius: 8px;
   min-width: 300px;
 }
+
+.wave-text span {
+  display: inline-block;
+  animation: wave 1.5s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
 
 
 
