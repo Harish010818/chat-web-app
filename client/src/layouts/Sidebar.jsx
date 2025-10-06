@@ -3,8 +3,6 @@ import { BiSearchAlt2 } from "react-icons/bi";
 import { useDispatch, useSelector } from 'react-redux';
 import OtherUsers from '../components/users/OtherUsers';
 import { setOtherUser } from '../useRedux/userSlice';
-import toast from 'react-hot-toast';
-import axios from 'axios';
 
 
 const Sidebar = () => {
@@ -45,7 +43,7 @@ const Sidebar = () => {
 
 
     return (
-        <div className='md:border-r md:border-slate-300 grid md:w-96 w-full bg-[var(--homepage-white)] fixed h-screen' >
+        <div className='md:border-r md:border-slate-300 grid md:w-96 w-full bg-[var(--homepage-white)] fixed h-screen overflow-y-auto' >
 
             <div className='md:border-r md:border-slate-300 md:w-96 w-full fixed grid gap-8 md:bg-[var(--homepage-white)] bg-blue-500 py-4 px-8  z-10' >
                 <h1 className='text-[var(--rich-black)] text-2xl font-medium' >Messages</h1>

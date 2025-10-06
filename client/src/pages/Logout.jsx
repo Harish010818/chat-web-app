@@ -180,8 +180,8 @@ export const Logout = () => {
                                     </label>
                                     <div className="text-sm">{`${authUser?.fullName}`}</div>
                                 </div>
-                                <div className="flex gap-2 justify-center items-center">
-                                    <div onClick={logoutHandler} className="p-1 rounded hover:bg-white/15 hover:bg-opacity-10 transition-colors duration-200 group">
+                                <div className="flex gap-2 justify-center items-center" onClick={logoutHandler} >
+                                    <div className="p-1 rounded hover:bg-white/15 hover:bg-opacity-10 transition-colors duration-200 group">
                                         <AiOutlineLogout size={27} />
                                     </div>
                                     <div className="text-sm">Logout</div>
