@@ -42,7 +42,7 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
             <div className={`${authUser?._id === message?.senderId
                 ? 'bg-[var(--rich-black)] text-[var(--chat-bg)] self-end'
                 : 'bg-[var(--homepage-white)] text-black self-start'} 
-                inline-block max-w-[60%] pl-1.5 pb-5 pr-10 rounded-lg shadow text-sm cursor-pointer group relative`}>
+                inline-block max-w-[60%] pl-2.5 pb-5 pr-10 rounded-lg shadow text-sm cursor-pointer group relative`}>
 
                 {/* dropdown menu */}
                 {isActive && (
