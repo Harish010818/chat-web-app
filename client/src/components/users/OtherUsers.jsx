@@ -12,7 +12,7 @@ const OtherUsers = () => {
     if (!otherUser) return null; // React me undefined/null handle
 
     return (
-        <div className='pt-[200px] overflow-auto'>
+        <div className='pt-[200px] pb-[50px] overflow-auto'>
             {
                 otherUser.length > 0 ? (
                     otherUser.map((user) => (
