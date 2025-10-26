@@ -33,8 +33,10 @@ export const sendMesaage = async (req, res) => {
       })
 
       if (newMessage) {
-         gotConversation.lastMessage = newMessage._id;
          gotConversation.messages.push(newMessage._id);
+         // gotConversation.lastMessage = newMessage._id;    // this was the actual bug which was lying here
+         let len = gotConversation.messages.length-1;
+         gotConversation.lastMessage = gotConversation.messages[len]._id; 
       }
 
       // await gotConversation.save();
@@ -108,34 +110,57 @@ export const editMessage = async(req, res) => {
 
 
 
-export const unsendMessage = async(req, res) => {
-   try {
-      const messageId = req.params.id;
-      const message = await Message.findById(messageId);
-      const { receiverId } = message; 
+export const unsendMessage = async (req, res) => {
+  try {
+    const messageId = req.params.id;
+    const message = await Message.findById(messageId);
 
-      await Message.findOneAndDelete({ _id: messageId });
-     
-      const receiverSocketId = getReceiverSocketId(receiverId);
+    if (!message) {
+      return res.status(404).json({ success: false, message: "Message not found" });
+    }
 
-      if(receiverSocketId) {
-         io.to(receiverSocketId).emit('messageDeleted', messageId);
-      }
+    const { receiverId, senderId } = message;
 
-      res.status(200).json({
-         success: true,
-         message: "Message unsent successfully"
-      });
-      
-     } catch(err){
-        console.error(err);
-     }
-   }
+    // Delete message from DB
+    await Message.findByIdAndDelete(messageId);
 
+    // Find the conversation
+    const gotConversation = await Conversation.findOne({
+      Participants: { $all: [senderId, receiverId] },
+    });
 
+    if (!gotConversation) {
+      return res.status(404).json({ success: false, message: "Conversation not found" });
+    }
 
+    // Remove messageId from messages array
+    gotConversation.messages.pull(messageId);
 
+    // Update lastMessage
+    if (gotConversation.messages.length > 0) {
+      const lastIdx = gotConversation.messages.length - 1;
+      gotConversation.lastMessage = gotConversation.messages[lastIdx];
+    } else {
+      gotConversation.lastMessage = null;
+    }
 
+    await gotConversation.save();
+
+    // Emit socket event
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("messageDeleted", messageId);
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Message unsent successfully",
+    });
+  } catch (err) {
+    console.error("Error in unsendMessage:", err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 
 
