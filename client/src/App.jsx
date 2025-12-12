@@ -21,7 +21,6 @@ function App() {
   const dispatch = useDispatch();
 
 
-
   useEffect(() => {
     const fetchUser = async () => {
       dispatch(setLoader(true));

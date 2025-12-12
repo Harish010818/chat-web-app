@@ -146,7 +146,7 @@ export const otherUsers = async (req, res) => {
                 const convo = await Conversation.find({
                     Participants: { $all: [senderId, user._id] }
                 }).populate("lastMessage");
-
+                 
                 return {
                     _id: user._id,
                     fullName: user.fullName,
@@ -154,6 +154,8 @@ export const otherUsers = async (req, res) => {
                     lastMessage: convo[0]?.lastMessage?.message || null,
                     createdAt: convo[0]?.lastMessage?.createdAt || null
                 }
+
+                
             })
         );
 
