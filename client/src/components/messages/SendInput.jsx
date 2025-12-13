@@ -51,8 +51,12 @@ const SendInput = () => {
                     placeholder="Send a message..."
                     className="w-full text-gray-600 border border-gray-300 bg-white focus:outline-none focus:ring-1 text-sm rounded-lg pl-4 pr-10 py-3"
                 />
-                <button type="submit" className="text-gray-600 absolute inset-y-0 right-3 flex items-center cursor-pointer">
-                    <IoSend />
+                <button 
+                type="submit" 
+                className={`${message ? `text-blue-500` : `text-gray-600`} absolute inset-y-0 right-3 flex items-center cursor-pointer`}>
+                    <IoSend
+                     size={21}   
+                    />
                 </button>
             </div>
         </form>
