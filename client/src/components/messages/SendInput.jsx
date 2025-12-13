@@ -59,7 +59,7 @@ const SendInput = () => {
                     />
                 </button>
             </div>
-        </form>
+     </form>
     )
 }
 
