@@ -11,26 +11,32 @@ export const useSocket = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     if (authUser) {
-      const socketio = io(`${import.meta.env.VITE_API_URL}`, {
-        query: { userId: authUser._id },
-      });
+        
+      const socketio = io(`${import.meta.env.VITE_API_URL}`, 
+      { query: { userId: authUser._id }, });
+
+      console.log(socketio);
 
       dispatch(setSocket(socketio));
-
+      
       socketio?.on("getOnlineUsers", (onlineUsers) => {
         dispatch(setOnlineUsers(onlineUsers));
       });
 
       return () => {
-        socketio.off("getOnlineUsers"); //Prevent multiple listeners
-        socketio.close();
+        socketio.off("getOnlineUsers"); //prevent multiple listeners
+        socketio.close();               //it will trigger disconnection event of socket on the server side
       };
-    } else {
-      if (socket) {
-        socket.close();
-        dispatch(setSocket(null));
-      }
+    } 
+    
+    else {
+
+        if (socket) {
+            socket.close();
+            dispatch(setSocket(null));
+        }
     }
   }, [authUser]);
 };

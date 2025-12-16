@@ -16,8 +16,7 @@ export const Logout = () => {
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
-    const { authUser } = useSelector(store => store.user);
-    console.log(isMenuOpen); 
+    const { authUser } = useSelector(store => store.user); 
 
     useEffect(() => {
         const handleResize = () => {

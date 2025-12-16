@@ -11,36 +11,17 @@ import { useGetUser } from "./hooks/useGetUser";
 
 function App() {
   const { loader } = useSelector((store) => store.user);
-  useGetUser();
-  useSocket();
   
+  useSocket();
+  useGetUser();
+
   const router = createBrowserRouter([
+    {path: "/", element: <LandingPage />}, 
+    {path: "/login", element: <LoginPage />},
+    {path: "/signup", element: <SignupPage />},
+    {path: "/home",element: (<ProtectRoute><HomePage /></ProtectRoute>)},
     {
-      path: "/",
-      element: <LandingPage />,
-    },
-    
-    {
-      path: "/login",
-      element: <LoginPage />,
-    },
-
-    {
-      path: "/signup",
-      element: <SignupPage />,
-    },
-
-    {
-      path: "/home",
-      element: (
-        <ProtectRoute>
-          <HomePage />
-        </ProtectRoute>
-      ),
-    },
-
-    {
-      path: "*",
+     path: "*",
       element: (
         <div className="flex items-center justify-center min-h-screen text-3xl">
           404 Page Not Found...
