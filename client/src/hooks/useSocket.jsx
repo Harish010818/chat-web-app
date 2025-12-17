@@ -32,7 +32,7 @@ export const useSocket = () => {
     } 
     
     else {
-
+        
         if (socket) {
             socket.close();
             dispatch(setSocket(null));

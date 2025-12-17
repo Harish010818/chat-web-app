@@ -6,15 +6,12 @@ import SignupPage from "./pages/SignupPage";
 import HomePage from "./pages/HomePage";
 import ProtectRoute from "./protectRoute/ProtectRoute";
 import LayoutLoader from "./components/shared/Loader";
-import { useSocket } from "./hooks/useSocket";
 import { useGetUser } from "./hooks/useGetUser";
 
 function App() {
   const { loader } = useSelector((store) => store.user);
-  
-  useSocket();
   useGetUser();
-
+  
   const router = createBrowserRouter([
     {path: "/", element: <LandingPage />}, 
     {path: "/login", element: <LoginPage />},

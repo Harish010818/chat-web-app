@@ -13,7 +13,7 @@ export const useGetUser = () => {
         const res = await axios.get(
           `${import.meta.env.VITE_API_URL}/api/v1/user/me`,
            {
-            withCredentials: true,
+             withCredentials: true,
            }
         );
 
@@ -27,5 +27,5 @@ export const useGetUser = () => {
     };
 
     fetchUser();
-  }, [dispatch]);
+  }, []);
 };

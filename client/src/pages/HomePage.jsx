@@ -1,12 +1,10 @@
-
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Logout } from "./Logout";
 import Sidebar from "../layouts/Sidebar";
 import MessageContainer from "../layouts/MessageContainer";
 import Modal from "../components/dialogs/EditMessageBox";
 import { useRef, useState } from "react";
 import EditMsgContext from "../context/EditMsgContext";
+import { useSocket } from "../hooks/useSocket";
 
 
 
@@ -15,6 +13,8 @@ const HomePage = () => {
   const [message, setMessage] = useState(null);
   const [input, setInput] = useState("");
   const inputRef = useRef(null);
+
+  useSocket();
 
   return (
     <div className="min-h-screen bg-blue-500 overflow-hidden md:pl-16 relative">
