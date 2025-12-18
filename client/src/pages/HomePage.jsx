@@ -13,7 +13,7 @@ const HomePage = () => {
   const [message, setMessage] = useState(null);
   const [input, setInput] = useState("");
   const inputRef = useRef(null);
-
+  
   useSocket();
 
   return (
