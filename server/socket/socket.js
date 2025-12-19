@@ -8,7 +8,7 @@ dotenv.config();
 const app = express();
 const server = http.createServer(app); 
 
-const io = new Server(server, { // wrapped http server inside socket
+const io = new Server(server, {  // wrapped http server inside socket
   cors: {
     origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST'],

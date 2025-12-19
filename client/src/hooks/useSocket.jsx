@@ -17,8 +17,6 @@ export const useSocket = () => {
       const socketio = io(`${import.meta.env.VITE_API_URL}`, 
       { query: { userId: authUser._id }, });
 
-      console.log(socketio);
-
       dispatch(setSocket(socketio));
       
       socketio?.on("getOnlineUsers", (onlineUsers) => {
@@ -26,8 +24,8 @@ export const useSocket = () => {
       });
 
       return () => {
-        socketio.off("getOnlineUsers"); //prevent multiple listeners
-        socketio.close();               //it will trigger disconnection event of socket on the server side
+        socketio.off("getOnlineUsers"); // prevent multiple listeners
+        socketio.close();               // it will trigger disconnection event of socket on the server side
       };
     } 
     
