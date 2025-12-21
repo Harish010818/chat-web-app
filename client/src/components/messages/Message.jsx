@@ -7,7 +7,7 @@ import TimeFormat from "../../utils/TimeFormat";
 const Message = ({ message, activeMessageId, setActiveMessageId }) => {
       
     const scroll = useRef(null);
-    const { authUser, selectedUser } = useSelector(store => store.user);
+    const { authUser } = useSelector(store => store.user);
     
     // console.log(activeMessageId, message._id);
     const isActive = activeMessageId === message._id; 

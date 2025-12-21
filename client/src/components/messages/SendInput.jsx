@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import { IoSend } from "react-icons/io5";
+import { Plus, SmilePlus } from 'lucide-react';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from '../../useRedux/messageSlice';
 import toast from 'react-hot-toast';
 
-const SendInput = () => {
+const SendInput = ({setAttachMenuOpen}) => {
     const [message, setMessage] = useState("");
 
     const dispatch = useDispatch();
@@ -48,9 +49,15 @@ const SendInput = () => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     type="text"
-                    placeholder="Send a message..."
-                    className="w-full text-gray-600 border border-gray-300 bg-white focus:outline-none focus:ring-1 text-sm rounded-lg pl-4 pr-10 py-3"
+                    placeholder="Type a message..."
+                    className="w-full text-gray-600 border border-gray-300 bg-white focus:outline-none focus:ring-1 text-sm rounded-lg pl-18 pr-10 py-3"
                 />
+                <div className='absolute left-3 top-3 inset-y-0 text-blue-500'>
+                    <div className='flex gap-1'>
+                       <Plus size={24} className='cursor-pointer' onClick={() => setAttachMenuOpen(p => !p)}/>
+                       <SmilePlus size={23} className='cursor-pointer' />
+                     </div>       
+                </div>
                 <button 
                 type="submit" 
                 className={`${message ? `text-blue-500` : `text-gray-600`} absolute inset-y-0 right-3 flex items-center cursor-pointer`}>
