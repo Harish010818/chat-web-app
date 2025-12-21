@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from '../../useRedux/messageSlice';
 import toast from 'react-hot-toast';
 
-const SendInput = ({setAttachMenuOpen}) => {
+const SendInput = ({setAttachMenuOpen, menuBtnRef }) => {
     const [message, setMessage] = useState("");
 
     const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const SendInput = ({setAttachMenuOpen}) => {
                 />
                 <div className='absolute left-3 top-3 inset-y-0 text-blue-500'>
                     <div className='flex gap-1'>
-                       <Plus size={24} className='cursor-pointer' onClick={() => setAttachMenuOpen(p => !p)}/>
+                       <Plus ref={menuBtnRef} size={24} className='cursor-pointer' onClick={() => setAttachMenuOpen(p=>!p)}/>
                        <SmilePlus size={23} className='cursor-pointer' />
                      </div>       
                 </div>

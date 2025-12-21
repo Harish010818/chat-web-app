@@ -9,19 +9,20 @@ import AttachMenu from "../components/dialogs/AttachMenu";
 const MessageContainer = () => {
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
 
-  // const menuRef = useRef(null);
-
-  console.log(attachMenuOpen);
+  const menuRef = useRef(null);
+  const menuBtnRef = useRef(null);
 
   const dispatch = useDispatch();
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 762);
 
-  const { selectedUser, authUser, onlineUsers } = useSelector((store) => store.user);
+  const { selectedUser, authUser, onlineUsers } = useSelector(
+    (store) => store.user
+  );
 
   const isOnline = onlineUsers?.includes(selectedUser?._id);
 
   const backToHomePage = () => {
-      dispatch(setSelectedUser(null));
+    dispatch(setSelectedUser(null));
   };
 
   useEffect(() => {
@@ -31,22 +32,24 @@ const MessageContainer = () => {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        //To isolate the click event from the menu button and bar
+        menuRef.current &&
+        menuBtnRef.current &&
+        !menuRef.current.contains(e.target) &&
+        !menuBtnRef.current.contains(e.target)
+      ) {
+        setAttachMenuOpen(false);
+      }
+    };
 
-  // useEffect(() => {
-  //     const handleClickOutside = (e) => {
-  //         // console.log("hissse", menuRef.current.contains(e.target));
-  //         // // if(!menuRef.current.contains(e.target)){
-  //         // //    setAttachMenuOpen(false);
-  //         // // }
-  //     };
-
-  //       window.addEventListener('click', handleClickOutside);
-  //       return () => window.removeEventListener('click', handleClickOutside);
-
-  //   }, [attachMenuOpen]);
+    window.addEventListener("click", handleClickOutside);
+    return () => window.removeEventListener("click", handleClickOutside);
+  }, [attachMenuOpen]);
 
   return (
     <div
@@ -67,10 +70,13 @@ const MessageContainer = () => {
           <Messages />
           <SendInput
             setAttachMenuOpen={setAttachMenuOpen}
+            menuBtnRef={menuBtnRef}
           />
-          {attachMenuOpen && <div className="absolute bottom-20 left-0">
-            <AttachMenu />
-          </div>}
+          {attachMenuOpen && (
+            <div ref={menuRef} className="absolute bottom-20 left-0">
+              <AttachMenu />
+            </div>
+          )}
         </>
       ) : (
         // for the large screen we need to show greetings!!!
