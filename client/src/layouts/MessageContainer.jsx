@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { setSelectedUser } from "../useRedux/userSlice";
 import ChatHeader from "../components/messages/ChatHeader";
 import AttachMenu from "../components/dialogs/AttachMenu";
+import Emojis from "../components/dialogs/Emojis";
 
 const MessageContainer = () => {
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
@@ -12,6 +13,8 @@ const MessageContainer = () => {
 
   const menuRef = useRef(null);
   const menuBtnRef = useRef(null);
+  const emojiRef = useRef(null);
+  const emojiBtnRef = useRef(null);
 
   const dispatch = useDispatch();
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 762);
@@ -46,11 +49,20 @@ const MessageContainer = () => {
       ) {
         setAttachMenuOpen(false);
       }
+      if (
+        //To isolate the click event from the menu button and AttachmentsMenubar
+        emojiRef.current &&
+        emojiBtnRef.current &&
+        !emojiRef.current.contains(e.target) &&
+        !emojiBtnRef.current.contains(e.target)
+      ) {
+        setEmojisOpen(false);
+      }
     };
 
     window.addEventListener("click", handleClickOutside);
     return () => window.removeEventListener("click", handleClickOutside);
-  }, [attachMenuOpen]);
+  }, [attachMenuOpen, emojisOpen]);
 
   return (
     <div
@@ -73,6 +85,7 @@ const MessageContainer = () => {
             setAttachMenuOpen={setAttachMenuOpen}
             setEmojisOpen={setEmojisOpen}
             menuBtnRef={menuBtnRef}
+            emojiBtnRef={emojiBtnRef}
           />
           {attachMenuOpen && (
             <div ref={menuRef} className="absolute bottom-20 left-0">
@@ -80,8 +93,8 @@ const MessageContainer = () => {
             </div>
           )}
           {emojisOpen && (
-            <div  className="absolute bottom-20 left-25">
-              <AttachMenu />
+            <div ref={emojiRef} className="absolute bottom-20 left-40">
+              <Emojis />
             </div>
           )}
         </>
