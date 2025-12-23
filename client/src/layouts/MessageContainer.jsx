@@ -8,6 +8,7 @@ import AttachMenu from "../components/dialogs/AttachMenu";
 
 const MessageContainer = () => {
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
+  const [emojisOpen, setEmojisOpen] = useState(false);
 
   const menuRef = useRef(null);
   const menuBtnRef = useRef(null);
@@ -37,7 +38,7 @@ const MessageContainer = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        //To isolate the click event from the menu button and bar
+        //To isolate the click event from the menu button and AttachmentsMenubar
         menuRef.current &&
         menuBtnRef.current &&
         !menuRef.current.contains(e.target) &&
@@ -70,10 +71,16 @@ const MessageContainer = () => {
           <Messages />
           <SendInput
             setAttachMenuOpen={setAttachMenuOpen}
+            setEmojisOpen={setEmojisOpen}
             menuBtnRef={menuBtnRef}
           />
           {attachMenuOpen && (
             <div ref={menuRef} className="absolute bottom-20 left-0">
+              <AttachMenu />
+            </div>
+          )}
+          {emojisOpen && (
+            <div  className="absolute bottom-20 left-25">
               <AttachMenu />
             </div>
           )}
