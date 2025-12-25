@@ -213,7 +213,14 @@ export const Logout = () => {
                 />
               </div>
             )}
-          </>
+        <div className="absolute right-4 bottom-4 h-10 w-10 flex justify-center items-center rounded-xl bg-black cursor-pointer z-10">
+                <Plus
+                  onClick={() => setIsMenuOpen(true)}
+                  size={30}
+                  className="text-white"
+                />
+        </div>  
+        </>
         )}
       </div>
     </>
