@@ -21,7 +21,7 @@ export const Logout = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768);
-  const { authUser } = useSelector((store) => store.user);
+  const { authUser, selectedUser } = useSelector((store) => store.user);
 
   useEffect(() => {
     const handleResize = () => {
@@ -213,13 +213,12 @@ export const Logout = () => {
                 />
               </div>
             )}
-        <div className="absolute right-4 bottom-4 h-10 w-10 flex justify-center items-center rounded-xl bg-black cursor-pointer z-10">
+              {!selectedUser && <div className="absolute right-4 bottom-4 h-10 w-10 flex justify-center items-center rounded-xl bg-black cursor-pointer z-10">
                 <Plus
-                  onClick={() => setIsMenuOpen(true)}
                   size={30}
                   className="text-white"
                 />
-        </div>  
+        </div>}  
         </>
         )}
       </div>
