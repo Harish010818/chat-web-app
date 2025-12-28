@@ -1,4 +1,3 @@
-import React, { useState } from 'react'
 import { IoSend } from "react-icons/io5";
 import { Plus, SmilePlus } from 'lucide-react';
 import axios from "axios";
@@ -6,9 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from '../../useRedux/messageSlice';
 import toast from 'react-hot-toast';
 
-const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef }) => {
-    const [message, setMessage] = useState("");
-
+const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, message, setMessage }) => {
     const dispatch = useDispatch();
 
     const { selectedUser } = useSelector(store => store.user);
@@ -38,6 +35,7 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef })
 
        setMessage("");
     }
+
 
     return (
         <form

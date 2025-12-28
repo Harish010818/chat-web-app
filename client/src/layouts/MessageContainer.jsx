@@ -10,6 +10,7 @@ import Emojis from "../components/dialogs/Emojis";
 const MessageContainer = () => {
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
   const [emojisOpen, setEmojisOpen] = useState(false);
+  const [message, setMessage] = useState("");
 
   const menuRef = useRef(null);
   const menuBtnRef = useRef(null);
@@ -26,7 +27,11 @@ const MessageContainer = () => {
   const isOnline = onlineUsers?.includes(selectedUser?._id);
 
   const backToHomePage = () => {
-    dispatch(setSelectedUser(null));
+      dispatch(setSelectedUser(null));
+  };
+
+  const handleEmojiSelect = (emoji) => {
+      setMessage((prev) => prev + emoji.native);
   };
 
   useEffect(() => {
@@ -86,15 +91,18 @@ const MessageContainer = () => {
             setEmojisOpen={setEmojisOpen}
             menuBtnRef={menuBtnRef}
             emojiBtnRef={emojiBtnRef}
+            message={message} 
+            setMessage={setMessage} 
           />
           {attachMenuOpen && (
             <div ref={menuRef} className="absolute bottom-20 left-0">
               <AttachMenu />
             </div>
           )}
+          {/* The Picker Popover */}
           {emojisOpen && (
-            <div ref={emojiRef} className="absolute bottom-20 left-40">
-              <Emojis />
+            <div ref={emojiRef} className="absolute bottom-20 left-0 z-50">
+              <Emojis onEmojiSelect={handleEmojiSelect} />
             </div>
           )}
         </>
