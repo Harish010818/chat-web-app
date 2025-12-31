@@ -169,9 +169,9 @@ export const Logout = () => {
                   <input
                     type="file"
                     accept="image/*"
+                    id="profileUpload"
                     onChange={uploadImgHandler}
                     className="hidden"
-                    id="profileUpload"
                   />
                   <label
                     htmlFor="profileUpload"
