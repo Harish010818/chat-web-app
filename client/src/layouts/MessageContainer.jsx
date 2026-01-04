@@ -6,8 +6,15 @@ import { setSelectedUser } from "../useRedux/userSlice";
 import ChatHeader from "../components/messages/ChatHeader";
 import AttachMenu from "../components/dialogs/AttachMenu";
 import Emojis from "../components/dialogs/Emojis";
+import { useContext } from "react";
+import FilePreviewContainer from "../components/dialogs/FilePreviewContainer";
+import EditMsgContext from "../context/EditMsgContext";
+
 
 const MessageContainer = () => {
+  const { selectedFile } = useContext(EditMsgContext);
+  console.log(selectedFile);
+  
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
   const [emojisOpen, setEmojisOpen] = useState(false);
   const [message, setMessage] = useState("");
@@ -46,7 +53,7 @@ const MessageContainer = () => {
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
-        //To isolate the click event from the menu button and AttachmentsMenubar
+        // To isolate the click event from the menu button and AttachmentsMenubar
         menuRef.current &&
         menuBtnRef.current &&
         !menuRef.current.contains(e.target) &&
@@ -85,8 +92,14 @@ const MessageContainer = () => {
             isLargeScreen={isLargeScreen}
             backToHomePage={backToHomePage}
           />
-          <Messages />
-          <SendInput
+
+          {selectedFile ? <FilePreviewContainer 
+            message={message} 
+            setMessage={setMessage}  /> : 
+          (
+          <>
+           <Messages />
+           <SendInput
             setAttachMenuOpen={setAttachMenuOpen}
             setEmojisOpen={setEmojisOpen}
             menuBtnRef={menuBtnRef}
@@ -99,12 +112,15 @@ const MessageContainer = () => {
               <AttachMenu />
             </div>
           )}
+
           {/* The Picker Popover */}
           {emojisOpen && (
             <div ref={emojiRef} className="absolute bottom-20 left-0 z-50">
               <Emojis onEmojiSelect={handleEmojiSelect} />
             </div>
           )}
+          </> )
+        }
         </>
       ) : (
         // for the large screen we need to show greetings!!!

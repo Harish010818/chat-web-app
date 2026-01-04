@@ -9,6 +9,7 @@ import { useSocket } from "../hooks/useSocket";
 
 
 const HomePage = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
   const [messageEditOpen, setMessageEditOpen] = useState(false);
   const [message, setMessage] = useState(null);
   const [input, setInput] = useState("");
@@ -26,7 +27,9 @@ const HomePage = () => {
           message,
           input, 
           setInput, 
-          inputRef
+          inputRef,
+          selectedFile, 
+          setSelectedFile
         }
           }
         >
