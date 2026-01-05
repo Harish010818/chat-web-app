@@ -15,7 +15,7 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
     const onSubmitHandler = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/message/send/${selectedUser?._id}`,
+            const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/v1/message/send-text/${selectedUser?._id}`,
                 { message },
 
                 {

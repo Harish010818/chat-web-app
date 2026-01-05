@@ -2,7 +2,6 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import cloudinary from "../utils/cloudinary.js";
 import multer from "multer";
 
-
 const storage = new CloudinaryStorage({
     cloudinary,
     params: {
@@ -11,7 +10,5 @@ const storage = new CloudinaryStorage({
     },
 });
 
-const upload = multer({ storage }).single("profilePhoto")
-
-
-export default upload;
+export const uploadProfile = multer({ storage }).single("profilePhoto");
+export const uploadImgFile = multer({ storage }).single("image");

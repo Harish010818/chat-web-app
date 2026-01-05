@@ -93,9 +93,12 @@ const MessageContainer = () => {
             backToHomePage={backToHomePage}
           />
 
-          {selectedFile ? <FilePreviewContainer 
+          {selectedFile ? 
+          <FilePreviewContainer 
             message={message} 
-            setMessage={setMessage}  /> : 
+            setMessage={setMessage}  
+          /> 
+          : 
           (
           <>
            <Messages />

@@ -187,10 +187,8 @@ export const uploadFile = async (req, res) => {
             { new: true }
         )
 
-        res.json(user);
+       res.json(user);
     } catch (err) {
         res.status(500).json({ error: "Upload failed" });
     }
 }
-
-
