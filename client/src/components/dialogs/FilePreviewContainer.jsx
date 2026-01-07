@@ -9,46 +9,54 @@ import axios from "axios";
 
 const FilePreviewContainer = ({ message, setMessage }) => {
   const { selectedFile, setSelectedFile } = useContext(EditMsgContext);
+  console.log(selectedFile);
   const dispatch = useDispatch();
-  const { selectedUser } = useSelector(store => store.user);
-  const { messages } =     useSelector(store => store.message);
+  const { selectedUser } = useSelector((store) => store.user);
+  const { messages } = useSelector((store) => store.message);
 
-  const onSubmitHandler = async(e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
 
-    if (!selectedFile && !message)return;
+    if (!selectedFile && !message) return;
+    const fileCategory = getFileCategory(selectedFile);
 
     const formData = new FormData();
-    formData.append("image", selectedFile); //backend multer field
+    formData.append(fileCategory, selectedFile); //backend multer field
     formData.append("message", message);
 
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/v1/message/send-file/${selectedUser?._id}`,
-         formData,
+        formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
 
-          withCredentials: true  
+          withCredentials: true,
         }
       );
-    
-    if(res){
-       dispatch(setMessages([...messages, res?.data?.newMessage]));
-       setSelectedFile(null);   
-    }  
-         
+
+      if (res) {
+        dispatch(setMessages([...messages, res?.data?.newMessage]));
+        setSelectedFile(null);
+      }
     } catch (err) {
-       toast.error("Failed to upload image");
-       console.error("Upload failed:", err); 
+      toast.error("Failed to upload image");
+      console.error("Upload failed:", err);
     }
   };
 
   const onChangeHandler = (e) => {
     setMessage(e.target.value);
   };
+
+  const getFileCategory = (file) => {
+  if (file.type.startsWith("image/")) return "image";
+  if (file.type.startsWith("audio/")) return "audio";
+//   if (file.type === "application/pdf") return "pdf";
+  return "unknown";
+};
 
   return (
     <>
@@ -60,11 +68,21 @@ const FilePreviewContainer = ({ message, setMessage }) => {
             className="text-gray-500 absolute top-25 left-25 cursor-pointer"
           />
 
-          <img
-            src={URL.createObjectURL(selectedFile)}
-            alt="preview"
-            className="w-120 h-80 object-cover rounded"
-          />
+          {selectedFile.type.startsWith("image/") && (
+            <img
+              alt="preview"
+              src={URL.createObjectURL(selectedFile)}
+              className="w-120 h-80 object-cover rounded"
+            />
+          )}
+
+          {selectedFile.type.startsWith("audio/") && (
+            <audio
+              controls
+              src={URL.createObjectURL(selectedFile)}
+              className="max-w-xs w-full"
+            />
+          )}
 
           <form
             className="absolute bottom-8 max-w-2xl w-full"
@@ -83,7 +101,7 @@ const FilePreviewContainer = ({ message, setMessage }) => {
                 message ? `text-blue-500` : `text-gray-600`
               } absolute inset-y-0 right-3 flex items-center cursor-pointer`}
             >
-            <IoSend size={27} />
+              <IoSend size={27} />
             </button>
           </form>
 

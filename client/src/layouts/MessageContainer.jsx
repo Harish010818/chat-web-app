@@ -13,7 +13,6 @@ import EditMsgContext from "../context/EditMsgContext";
 
 const MessageContainer = () => {
   const { selectedFile } = useContext(EditMsgContext);
-  console.log(selectedFile);
   
   const [attachMenuOpen, setAttachMenuOpen] = useState(false);
   const [emojisOpen, setEmojisOpen] = useState(false);
