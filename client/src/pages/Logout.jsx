@@ -55,13 +55,11 @@ export const Logout = () => {
 
     const formData = new FormData();
 
-    formData.append("profilePhoto", file);
-
+    formData.append("file", file);
+    
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/v1/user/upload-profile/${
-          authUser._id
-        }`,
+        `${import.meta.env.VITE_API_URL}/api/v1/user/upload-profile/${authUser._id}`,
         formData,
         {
           headers: {

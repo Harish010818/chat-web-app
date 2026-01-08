@@ -169,7 +169,7 @@ export const otherUsers = async (req, res) => {
 }
 
 
-export const uploadFile = async (req, res) => {
+export const uploadProfile = async (req, res) => {
     
     try {
         if (!req.file) {

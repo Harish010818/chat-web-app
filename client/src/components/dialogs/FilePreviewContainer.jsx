@@ -18,11 +18,10 @@ const FilePreviewContainer = ({ message, setMessage }) => {
     e.preventDefault();
 
     if (!selectedFile && !message) return;
-    const fileCategory = getFileCategory(selectedFile);
 
     const formData = new FormData();
-    formData.append(fileCategory, selectedFile); //backend multer field
-    formData.append("message", message);
+    formData.append("file", selectedFile); // backend multer field
+    if(message) formData.append("message", message);
 
     try {
       const res = await axios.post(
@@ -50,13 +49,6 @@ const FilePreviewContainer = ({ message, setMessage }) => {
   const onChangeHandler = (e) => {
     setMessage(e.target.value);
   };
-
-  const getFileCategory = (file) => {
-  if (file.type.startsWith("image/")) return "image";
-  if (file.type.startsWith("audio/")) return "audio";
-//   if (file.type === "application/pdf") return "pdf";
-  return "unknown";
-};
 
   return (
     <>

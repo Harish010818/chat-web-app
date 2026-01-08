@@ -3,6 +3,7 @@ import { SlArrowDown } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import MessageMenu from "../dialogs/MessageMenu";
 import TimeFormat from "../../utils/TimeFormat";
+import Audio from "./Audio";
 
 const Message = ({ message, activeMessageId, setActiveMessageId }) => {
   const scroll = useRef(null);
@@ -43,6 +44,14 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
     );
   };
 
+  const isAudioUrl = (url) => {
+    return (
+      typeof url === "string" &&
+      (url.startsWith("http://") || url.startsWith("https://")) &&
+      /\.(ogg)$/i.test(url)
+    );
+  };
+
   return (
     <div
       ref={scroll}
@@ -59,9 +68,9 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
             : "bg-[var(--homepage-white)] text-black self-start"
         } 
                 inline-block ${
-                  !isImageUrl(message?.message)
+                  !isImageUrl(message?.message) && !isAudioUrl(message?.message)
                     ? "pl-2.5 pb-5 pr-10 max-w-[85%] sm:max-w-[70%] md:max-w-[50%] lg:max-w-[40%]"
-                    : "max-w-[60%] pb-5"
+                    : "max-w-[50%]"
                 } rounded-lg shadow text-sm cursor-pointer group relative`}
       >
         {/* dropdown menu */}
@@ -80,19 +89,23 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
           <SlArrowDown onClick={handleClick} />
         </div>
         <div>
-          {isImageUrl(message?.message) ? (
+          {isImageUrl(message?.message) && (
             <img
               src={message.message}
               alt="chat-img"
-              className="block w-full h-auto max-h-[450px] object-cover rounded-xl shadow-sm"
+              className="block w-full h-auto max-h-[450px] object-cover shadow-sm"
               loading="lazy"
             />
-          ) : (
+          )}
+
+          {isAudioUrl(message?.message) && <Audio url={message.message} />}
+
+          {!isImageUrl(message?.message) && !isAudioUrl(message?.message) && (
             <p>{message?.message}</p>
           )}
         </div>
 
-        <time className="absolute bottom-1 right-2 text-[10px] text-gray-400">
+        <time className="absolute bottom-1 right-2 text-[10px] text-gray-300">
           {TimeFormat(message.createdAt)}
         </time>
       </div>
