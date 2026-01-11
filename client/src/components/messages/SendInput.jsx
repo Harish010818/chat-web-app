@@ -3,8 +3,10 @@ import { Plus, SmilePlus } from "lucide-react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "../../useRedux/messageSlice";
+import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Mic } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const SendInput = ({
   setAttachMenuOpen,
@@ -18,13 +20,23 @@ const SendInput = ({
 
   const { selectedUser } = useSelector((store) => store.user);
 
+  const [count, setCount] = useState(0);
   const { messages } = useSelector((store) => store.message);
+  const [audioFile, setAudioFile] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
 
-  // open audio recording handler
+  const minutes = Math.floor(count / 60).toString().padStart(2, "0");
+  const seconds = (count % 60).toString().padStart(2, "0");
 
-  const openAudioRecord = () => {
-        console.log("recording...")
-  }
+  //audio recording handler
+  const audioRecordHandler = () => {
+    console.log("recording...");
+    setIsRecording((p) => !p);
+  };
+
+  const onRecordingDiscard = () => {
+    setIsRecording(false);
+  };
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -53,6 +65,20 @@ const SendInput = ({
     setMessage("");
   };
 
+  useEffect(() => {
+    let interval;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setCount((p) => p + 1);
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(interval);
+      if (isRecording) setCount(0);
+    };
+  }, [isRecording]);
+
   return (
     <form
       onSubmit={onSubmitHandler}
@@ -62,33 +88,64 @@ const SendInput = ({
         <input
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          disabled={isRecording ? true : false}
           type="text"
-          placeholder="Type a message..."
-          className="w-full text-gray-600 border border-gray-300 bg-white focus:outline-none focus:ring-1 text-sm rounded-lg pl-18 pr-10 py-3"
+          placeholder={isRecording ? "Audio Recording..." : "Type a message..."}
+          className="w-full text-gray-700 border border-gray-300 bg-white focus:outline-none focus:ring-1 text-sm rounded-lg pl-18 pr-10 py-3"
         />
-        <div className="absolute left-3 top-3 inset-y-0 text-blue-500">
-          <div className="flex gap-1">
-            <Plus
-              ref={menuBtnRef}
-              size={24}
-              className="cursor-pointer"
-              onClick={() => setAttachMenuOpen((p) => !p)}
-            />
-            <SmilePlus
-              ref={emojiBtnRef}
-              size={23}
-              className="cursor-pointer"
-              onClick={() => setEmojisOpen((p) => !p)}
-            />
+        {!isRecording && (
+          <div className="absolute left-3 top-3 inset-y-0 text-blue-500">
+            <div className="flex gap-1">
+              <Plus
+                ref={menuBtnRef}
+                size={24}
+                className="cursor-pointer"
+                onClick={() => setAttachMenuOpen((p) => !p)}
+              />
+              <SmilePlus
+                ref={emojiBtnRef}
+                size={23}
+                className="cursor-pointer"
+                onClick={() => setEmojisOpen((p) => !p)}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <button
-          type="submit"
+          // Change type dynamically here
+          type={message ? "submit" : "button"}
           className={`${
             message ? `text-blue-500` : `text-gray-600`
           } absolute inset-y-0 right-3 flex items-center cursor-pointer`}
         >
-          {message ? <IoSend size={21} /> : <Mic size={23} className=" hover:text-blue-500" onClick={openAudioRecord} />}
+          {isRecording && (
+            <div className="flex gap-6 absolute inset-y-0 right-20  items-center cursor-pointer">
+              <div className="text-gray-500">{`${minutes}:${seconds}`}</div>
+              <div className="">
+                <Trash2
+                  onClick={onRecordingDiscard}
+                  size={20}
+                  className="text-red-500"
+                />
+              </div>
+              <div>
+                <IoSend size={21} className="text-blue-500" />
+              </div>
+            </div>
+          )}
+          {message ? (
+            <IoSend size={21} />
+          ) : (
+            <Mic
+              size={23}
+              className={` ${
+                isRecording
+                  ? "text-red-600 animate-pulse"
+                  : "hover:text-blue-500"
+              }`}
+              onClick={audioRecordHandler}
+            />
+          )}
         </button>
       </div>
     </form>
