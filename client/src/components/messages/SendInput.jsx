@@ -3,7 +3,7 @@ import { Plus, SmilePlus } from "lucide-react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "../../useRedux/messageSlice";
-import { Trash2 } from "lucide-react";
+import { Trash2, CircleStop } from "lucide-react";
 import toast from "react-hot-toast";
 import { Mic } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -23,6 +23,7 @@ const SendInput = ({
   const { messages } = useSelector((store) => store.message);
   const [audioFile, setAudioFile] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -55,31 +56,39 @@ const SendInput = ({
         type: "audio/webm",
       });
 
-      setAudioFile(file); // Temporary state me store ho gaya
-      setIsRecording(false);
+    setAudioFile(file); // Temporary state me store ho gaya
     };
 
     mediaRecorderRef.current.start();
     setIsRecording(true);
+    setIsPlaying(true);
   };
 
-  const stopRecording = () => {
-    mediaRecorderRef.current.stop();
-    setAudioFile(null);
+  const flipRecording = () => {
+    
+    if(isPlaying){
+       setIsPlaying(false);
+       mediaRecorderRef.current.stop();
+      } else {
+       setIsPlaying(true);
+      mediaRecorderRef.current.start(); 
+    }
   };
 
   const onRecordingDiscard = () => {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
+    setIsPlaying(false);
+    setCount(0)
     setAudioFile(null);
   };
 
   const onAudioSubmitHandler = async (e) => {
       e.preventDefault();
-      mediaRecorderRef.current.stop();
+      console.log(audioFile); 
       if (!audioFile) return;
       const formData = new FormData();
-      formData.append("file", audioFile); // backend multer field
+      formData.append("file", audioFile); //backend multer field
   
       try {
         const res = await axios.post(
@@ -96,12 +105,17 @@ const SendInput = ({
   
         if (res) {
           dispatch(setMessages([...messages, res?.data?.newMessage]));
-          setAudioFile(null);
         }
       } catch (err) {
-        toast.error("Failed to upload image");
-        console.error("Upload failed:", err);
-      }
+          toast.error("Failed to upload image");
+          console.error("Upload failed:", err);
+      } 
+       finally {
+        setIsRecording(false);
+        setIsPlaying(false);
+        setCount(0)
+        setAudioFile(null);
+      }   
   };
 
 
@@ -133,19 +147,27 @@ const SendInput = ({
     setMessage("");
   };
 
+  // cleanup
+  useEffect(() => {
+      return () => {
+        audioFile && URL.revokeObjectURL(audioFile);
+       }
+    }, [audioFile])
+
+  // To count  
   useEffect(() => {
     let interval;
-    if (isRecording) {
-      interval = setInterval(() => {
+    if (isRecording && isPlaying) {
+        interval = setInterval(() => {
         setCount((p) => p + 1);
       }, 1000);
     }
 
     return () => {
       clearInterval(interval);
-      if (isRecording) setCount(0);
     };
-  }, [isRecording]);
+    
+  }, [isRecording, isPlaying]);
 
   return (
     <form
@@ -187,9 +209,10 @@ const SendInput = ({
           } absolute inset-y-0 right-3 flex items-center cursor-pointer`}
         >
           {isRecording && (
-            <div className="flex gap-6 absolute inset-y-0 right-20  items-center cursor-pointer">
+            <div className="flex gap-4 absolute inset-y-0 right-16 items-center cursor-pointer">
               <div className="text-gray-500">{`${minutes}:${seconds}`}</div>
-              <div className="">
+              <CircleStop onClick={flipRecording} size={20} className="text-red-500"/>
+              <div>
                 <Trash2
                   onClick={onRecordingDiscard}
                   size={20}
@@ -211,7 +234,7 @@ const SendInput = ({
                   ? "text-red-600 animate-pulse"
                   : "hover:text-blue-500"
               }`}
-             onClick={isRecording ? stopRecording : startRecording}
+             onClick={isRecording ? onRecordingDiscard : startRecording}
             />
           )}
         </button>

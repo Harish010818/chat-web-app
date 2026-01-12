@@ -163,6 +163,8 @@ export const sendFile = async (req, res) => {
   const receiverId = req.params.id;
   const uploadedFileUrl = req.file.path;
 
+  console.log("hello file is coming", uploadedFileUrl);
+
   try {
 
     let gotConversation = await Conversation.findOne({
