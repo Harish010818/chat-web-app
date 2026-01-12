@@ -9,7 +9,7 @@ import axios from "axios";
 
 const FilePreviewContainer = ({ message, setMessage }) => {
   const { selectedFile, setSelectedFile } = useContext(EditMsgContext);
-  console.log(selectedFile);
+  
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((store) => store.user);
   const { messages } = useSelector((store) => store.message);

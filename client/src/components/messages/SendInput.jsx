@@ -6,7 +6,7 @@ import { setMessages } from "../../useRedux/messageSlice";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Mic } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const SendInput = ({
   setAttachMenuOpen,
@@ -17,7 +17,6 @@ const SendInput = ({
   setMessage,
 }) => {
   const dispatch = useDispatch();
-
   const { selectedUser } = useSelector((store) => store.user);
 
   const [count, setCount] = useState(0);
@@ -25,18 +24,87 @@ const SendInput = ({
   const [audioFile, setAudioFile] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
 
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
   const minutes = Math.floor(count / 60).toString().padStart(2, "0");
   const seconds = (count % 60).toString().padStart(2, "0");
 
+
   //audio recording handler
-  const audioRecordHandler = () => {
-    console.log("recording...");
-    setIsRecording((p) => !p);
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream);
+
+    audioChunksRef.current = [];
+
+    mediaRecorderRef.current.ondataavailable = (e) => {
+      if (e.data.size > 0) {
+        audioChunksRef.current.push(e.data);
+      }
+    };
+
+    mediaRecorderRef.current.onstop = () => {
+      // 2. Chunks ko Blob me convert karo
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: "audio/webm",
+      });
+
+      // Blob ko File object me convert karo (backend requirement ke liye)
+      const file = new File([audioBlob], "recording.webm", {
+        type: "audio/webm",
+      });
+
+      setAudioFile(file); // Temporary state me store ho gaya
+      setIsRecording(false);
+    };
+
+    mediaRecorderRef.current.start();
+    setIsRecording(true);
+  };
+
+  const stopRecording = () => {
+    mediaRecorderRef.current.stop();
+    setAudioFile(null);
   };
 
   const onRecordingDiscard = () => {
+    mediaRecorderRef.current.stop();
     setIsRecording(false);
+    setAudioFile(null);
   };
+
+  const onAudioSubmitHandler = async (e) => {
+      e.preventDefault();
+      mediaRecorderRef.current.stop();
+      if (!audioFile) return;
+      const formData = new FormData();
+      formData.append("file", audioFile); // backend multer field
+  
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/v1/message/send-file/${selectedUser?._id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+  
+            withCredentials: true,
+          }
+        );
+  
+        if (res) {
+          dispatch(setMessages([...messages, res?.data?.newMessage]));
+          setAudioFile(null);
+        }
+      } catch (err) {
+        toast.error("Failed to upload image");
+        console.error("Upload failed:", err);
+      }
+  };
+
+
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -129,7 +197,7 @@ const SendInput = ({
                 />
               </div>
               <div>
-                <IoSend size={21} className="text-blue-500" />
+                <IoSend size={21} className="text-blue-500" onClick={onAudioSubmitHandler}/>
               </div>
             </div>
           )}
@@ -143,7 +211,7 @@ const SendInput = ({
                   ? "text-red-600 animate-pulse"
                   : "hover:text-blue-500"
               }`}
-              onClick={audioRecordHandler}
+             onClick={isRecording ? stopRecording : startRecording}
             />
           )}
         </button>

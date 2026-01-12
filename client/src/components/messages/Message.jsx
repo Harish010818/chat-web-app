@@ -48,7 +48,7 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
     return (
       typeof url === "string" &&
       (url.startsWith("http://") || url.startsWith("https://")) &&
-      /\.(ogg)$/i.test(url)
+      /\.(ogg|webm)$/i.test(url)
     );
   };
 
