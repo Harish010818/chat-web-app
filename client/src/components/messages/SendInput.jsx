@@ -3,16 +3,22 @@ import { Plus, SmilePlus } from "lucide-react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setMessages } from "../../useRedux/messageSlice";
-import { Trash2, CircleStop } from "lucide-react";
+import { Trash2, CircleStop, CirclePause } from "lucide-react";
 import toast from "react-hot-toast";
 import { Mic } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, message, setMessage,}) => {
-
+const SendInput = ({
+  setAttachMenuOpen,
+  menuBtnRef,
+  setEmojisOpen,
+  emojiBtnRef,
+  message,
+  setMessage,
+}) => {
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((store) => store.user);
-  
+
   const [count, setCount] = useState(0);
   const { messages } = useSelector((store) => store.message);
   const [audioFile, setAudioFile] = useState(null);
@@ -25,52 +31,7 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
   const minutes = Math.floor(count / 60).toString().padStart(2, "0");
   const seconds = (count % 60).toString().padStart(2, "0");
 
-  // only audio file handler
-  const onAudioSubmitHandler = async (e) => {
-      e.preventDefault();
-      setIsRecording(false);
-
-      console.log("api hitting", audioFile); 
-
-      if(!audioFile) {
-        setIsPlaying(false);
-        setCount(0);
-        setAudioFile(null);  
-      
-     return;  
-    } 
-
-      const formData = new FormData();
-      formData.append("file", audioFile); //backend multer field
-      try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_API_URL}/api/v1/message/send-file/${selectedUser?._id}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-  
-            withCredentials: true,
-          }
-        );
-  
-        if (res) {
-          dispatch(setMessages([...messages, res?.data?.newMessage]));
-        }
-      } catch (err) {
-          toast.error("Failed to upload image");
-          console.error("Upload failed:", err);
-      } 
-       finally {
-        setIsPlaying(false);
-        setCount(0)
-        setAudioFile(null);
-      }   
-  };
-
-
- // simple text message submit handler
+  // simple text message submit handler
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -89,13 +50,53 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
         }
       );
 
-      dispatch(setMessages([...messages, res?.data?.newMessage]));
+    dispatch(setMessages([...messages, res?.data?.newMessage]));
     } catch (error) {
       toast.error(error.response.data.message);
       console.error(error);
     }
 
-    setMessage("");
+  setMessage("");
+  };
+
+  // upload audio file handle
+  const handleFileUpload = async (filetoSend) => {
+
+    if (!filetoSend) {
+      setIsPlaying(false);
+      setCount(0);
+      setAudioFile(null);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("file", filetoSend); // backend multer field
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/v1/message/send-file/${
+          selectedUser?._id
+        }`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+
+          withCredentials: true,
+        }
+      );
+
+      if (res) {
+        dispatch(setMessages([...messages, res?.data?.newMessage]));
+      }
+    } catch (err) {
+      toast.error("Failed to upload image");
+      console.error("Upload failed:", err);
+    } finally {
+      setIsPlaying(false);
+      setCount(0);
+      setAudioFile(null);
+    }
   };
 
 
@@ -111,8 +112,8 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
         audioChunksRef.current.push(e.data);
       }
     };
-   
-    mediaRecorderRef.current.onstop = () => {
+
+    mediaRecorderRef.current.onstop = async () => {
       // 2. Chunks ko Blob me convert karo
       const audioBlob = new Blob(audioChunksRef.current, {
         type: "audio/webm",
@@ -123,56 +124,69 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
         type: "audio/webm",
       });
 
-    setAudioFile(file); // Temporary state me store ho gaya
+      setAudioFile(file); // Temporary state me store ho gaya
+      await handleFileUpload(file);
+      audioChunksRef.current = [];
     };
 
     mediaRecorderRef.current.start();
     setIsRecording(true);
     setIsPlaying(true);
   };
+
+
   // flip recording back and forth handler
   const flipRecording = () => {
-
-    if(mediaRecorderRef.current && isRecording){
-      if(mediaRecorderRef.current.state === "recording" && isPlaying){
-         setIsPlaying(false);
-         mediaRecorderRef.current.pause();
-        } else if(mediaRecorderRef.current.state === "paused" && !isPlaying) {
-         setIsPlaying(true);
-         mediaRecorderRef.current.resume(); 
+    if (mediaRecorderRef.current && isRecording) {
+      if (mediaRecorderRef.current.state === "recording" && isPlaying) {
+        setIsPlaying(false);
+        mediaRecorderRef.current.pause();
+      } else if (mediaRecorderRef.current.state === "paused" && !isPlaying) {
+        setIsPlaying(true);
+        mediaRecorderRef.current.resume();
       }
     }
   };
 
   // complete discard of recording wtih full cleanup
   const onRecordingDiscard = () => {
-        mediaRecorderRef.current.stop();
-        setIsRecording(false);
-        setIsPlaying(false);
-        setCount(0)
-        setAudioFile(null);
+    setIsRecording(false);
+    setIsPlaying(false);
+    setCount(0);
+    setAudioFile(null);
+  };
+
+
+   // only audio file handler
+  const onAudioSubmitHandler = async (e) => {
+    if(e)e.preventDefault();
+
+    if(mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
   };
 
   // cleanup
   useEffect(() => {
-      return () => {
-        audioFile && URL.revokeObjectURL(audioFile);
-       }
-    }, [audioFile])
+    return () => {
+      audioFile && URL.revokeObjectURL(audioFile);
+    };
+  }, [audioFile]);
 
-  // To count  
+
+  // To count
   useEffect(() => {
     let interval;
     if (isRecording && isPlaying) {
-        interval = setInterval(() => {
+      interval = setInterval(() => {
         setCount((p) => p + 1);
       }, 1000);
     }
 
-    return () => {
-      clearInterval(interval);
+    return () => { 
+       clearInterval(interval); 
     };
-    
   }, [isRecording, isPlaying]);
 
   return (
@@ -217,7 +231,13 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
           {isRecording && (
             <div className="flex gap-4 absolute inset-y-0 right-16 items-center cursor-pointer">
               <div className="text-gray-500">{`${minutes}:${seconds}`}</div>
-              <CircleStop onClick={flipRecording} size={20} className="text-red-500"/>
+              {!isPlaying ? <CircleStop
+                onClick={flipRecording}
+                size={20}
+                className="text-red-500"
+              /> : <CirclePause onClick={flipRecording}
+                size={20}
+                className="text-red-500"/>}
               <div>
                 <Trash2
                   onClick={onRecordingDiscard}
@@ -226,7 +246,11 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
                 />
               </div>
               <div>
-                <IoSend size={21} className="text-blue-500" onClick={onAudioSubmitHandler}/>
+                <IoSend
+                  size={21}
+                  className="text-blue-500"
+                  onClick={onAudioSubmitHandler}
+                />
               </div>
             </div>
           )}
@@ -240,7 +264,7 @@ const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, m
                   ? "text-red-600 animate-pulse"
                   : "hover:text-blue-500"
               }`}
-             onClick={isRecording ? onRecordingDiscard : startRecording}
+              onClick={isRecording ? onRecordingDiscard : startRecording}
             />
           )}
         </button>
