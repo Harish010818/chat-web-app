@@ -5,6 +5,7 @@ import multer from "multer";
 const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
+    console.log("req, file.mimetype");
     let resourceType = "image";
     let folder = "chatapp/images";
 

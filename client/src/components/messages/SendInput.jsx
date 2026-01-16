@@ -8,17 +8,11 @@ import toast from "react-hot-toast";
 import { Mic } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-const SendInput = ({
-  setAttachMenuOpen,
-  menuBtnRef,
-  setEmojisOpen,
-  emojiBtnRef,
-  message,
-  setMessage,
-}) => {
+const SendInput = ({setAttachMenuOpen, menuBtnRef, setEmojisOpen, emojiBtnRef, message, setMessage,}) => {
+
   const dispatch = useDispatch();
   const { selectedUser } = useSelector((store) => store.user);
-
+  
   const [count, setCount] = useState(0);
   const { messages } = useSelector((store) => store.message);
   const [audioFile, setAudioFile] = useState(null);
@@ -31,65 +25,23 @@ const SendInput = ({
   const minutes = Math.floor(count / 60).toString().padStart(2, "0");
   const seconds = (count % 60).toString().padStart(2, "0");
 
-
-  //audio recording handler
-  const startRecording = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorderRef.current = new MediaRecorder(stream);
-
-    audioChunksRef.current = [];
-
-    mediaRecorderRef.current.ondataavailable = (e) => {
-      if (e.data.size > 0) {
-        audioChunksRef.current.push(e.data);
-      }
-    };
-
-    mediaRecorderRef.current.onstop = () => {
-      // 2. Chunks ko Blob me convert karo
-      const audioBlob = new Blob(audioChunksRef.current, {
-        type: "audio/webm",
-      });
-
-      // Blob ko File object me convert karo (backend requirement ke liye)
-      const file = new File([audioBlob], "recording.webm", {
-        type: "audio/webm",
-      });
-
-    setAudioFile(file); // Temporary state me store ho gaya
-    };
-
-    mediaRecorderRef.current.start();
-    setIsRecording(true);
-    setIsPlaying(true);
-  };
-
-  const flipRecording = () => {
-    
-    if(isPlaying){
-       setIsPlaying(false);
-       mediaRecorderRef.current.stop();
-      } else {
-       setIsPlaying(true);
-      mediaRecorderRef.current.start(); 
-    }
-  };
-
-  const onRecordingDiscard = () => {
-    mediaRecorderRef.current.stop();
-    setIsRecording(false);
-    setIsPlaying(false);
-    setCount(0)
-    setAudioFile(null);
-  };
-
+  // only audio file handler
   const onAudioSubmitHandler = async (e) => {
       e.preventDefault();
-      console.log(audioFile); 
-      if (!audioFile) return;
+      setIsRecording(false);
+
+      console.log("api hitting", audioFile); 
+
+      if(!audioFile) {
+        setIsPlaying(false);
+        setCount(0);
+        setAudioFile(null);  
+      
+     return;  
+    } 
+
       const formData = new FormData();
       formData.append("file", audioFile); //backend multer field
-  
       try {
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/api/v1/message/send-file/${selectedUser?._id}`,
@@ -111,7 +63,6 @@ const SendInput = ({
           console.error("Upload failed:", err);
       } 
        finally {
-        setIsRecording(false);
         setIsPlaying(false);
         setCount(0)
         setAudioFile(null);
@@ -119,7 +70,7 @@ const SendInput = ({
   };
 
 
-
+ // simple text message submit handler
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -145,6 +96,61 @@ const SendInput = ({
     }
 
     setMessage("");
+  };
+
+
+  //audio recording handler
+  const startRecording = async () => {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    mediaRecorderRef.current = new MediaRecorder(stream);
+
+    audioChunksRef.current = [];
+
+    mediaRecorderRef.current.ondataavailable = (e) => {
+      if (e.data.size > 0) {
+        audioChunksRef.current.push(e.data);
+      }
+    };
+   
+    mediaRecorderRef.current.onstop = () => {
+      // 2. Chunks ko Blob me convert karo
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: "audio/webm",
+      });
+
+      // Blob ko File object me convert karo (backend requirement ke liye)
+      const file = new File([audioBlob], "recording.webm", {
+        type: "audio/webm",
+      });
+
+    setAudioFile(file); // Temporary state me store ho gaya
+    };
+
+    mediaRecorderRef.current.start();
+    setIsRecording(true);
+    setIsPlaying(true);
+  };
+  // flip recording back and forth handler
+  const flipRecording = () => {
+
+    if(mediaRecorderRef.current && isRecording){
+      if(mediaRecorderRef.current.state === "recording" && isPlaying){
+         setIsPlaying(false);
+         mediaRecorderRef.current.pause();
+        } else if(mediaRecorderRef.current.state === "paused" && !isPlaying) {
+         setIsPlaying(true);
+         mediaRecorderRef.current.resume(); 
+      }
+    }
+  };
+
+  // complete discard of recording wtih full cleanup
+  const onRecordingDiscard = () => {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+        setIsPlaying(false);
+        setCount(0)
+        setAudioFile(null);
   };
 
   // cleanup
