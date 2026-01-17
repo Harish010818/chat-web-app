@@ -13,8 +13,9 @@ const Audio = ({ url }) => {
       audioRef.current.pause();
     } else {
       audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
+   }
+
+  setIsPlaying(!isPlaying);
   };
 
   const onTimeUpdate = () => {
@@ -24,7 +25,7 @@ const Audio = ({ url }) => {
   };
 
   return (
-    <div className="flex items-center bg-black p-3 rounded-lg shadow-sm w-72 space-x-3">
+    <div className="flex items-center bg-black p-3 rounded-lg shadow-sm  max-w-full w-45 lg:w-72 space-x-3 overflow-hidden">
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
@@ -42,7 +43,7 @@ const Audio = ({ url }) => {
         />
       </div>
 
-      {/* Play/Pause Button */}
+      {/*Play/Pause Button */}
       <button
         onClick={togglePlay}
         className="text-gray-600 dark:text-gray-200 hover:scale-110 transition-transform"
