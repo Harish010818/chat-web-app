@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from "react";
 import ReactDOM from "react-dom";
-import TimeFormat from "../../utils/TimeFormat";
 import { MdCheckCircle } from "react-icons/md";
 import { IoMdClose } from "react-icons/io";
 import EditMsgContext from "../../context/EditMsgContext";
@@ -8,6 +7,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { editMessage } from "../../useRedux/messageSlice";
+import { TimeFormat } from "../../utils/UtilifyFunc";
 
 
 const Modal = ({ children }) => {

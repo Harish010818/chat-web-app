@@ -7,9 +7,11 @@ const AttachMenu = () => {
 
   const uploadImgHandler = (e) => {
     const file = e.target.files[0];
+
     if (file) {
-      setSelectedFile(file);
-    }
+       setSelectedFile(file);
+
+      }
   };
 
   const uploadAudioHandler = (e) => {

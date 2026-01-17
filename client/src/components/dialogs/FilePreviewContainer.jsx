@@ -21,7 +21,7 @@ const FilePreviewContainer = ({ message, setMessage }) => {
 
     const formData = new FormData();
     formData.append("file", selectedFile); // backend multer field
-    if(message) formData.append("message", message);
+    // if(message) formData.append("message", message);
 
     try {
       const res = await axios.post(

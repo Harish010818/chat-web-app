@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { SlArrowDown } from "react-icons/sl";
 import { useSelector } from "react-redux";
 import MessageMenu from "../dialogs/MessageMenu";
-import TimeFormat from "../../utils/TimeFormat";
+import {TimeFormat, isAudioUrl, isImageUrl } from "../../utils/UtilifyFunc";
 import Audio from "./Audio";
 
 const Message = ({ message, activeMessageId, setActiveMessageId }) => {
@@ -36,22 +36,7 @@ const Message = ({ message, activeMessageId, setActiveMessageId }) => {
     };
   }, []);
 
-  const isImageUrl = (url) => {
-    return (
-      typeof url === "string" &&
-      (url.startsWith("http://") || url.startsWith("https://")) &&
-      /\.(jpg|jpeg|png|gif|webp)$/i.test(url)
-    );
-  };
-
-  const isAudioUrl = (url) => {
-    return (
-      typeof url === "string" &&
-      (url.startsWith("http://") || url.startsWith("https://")) &&
-      /\.(ogg|webm)$/i.test(url)
-    );
-  };
-
+  
   return (
     <div
       ref={scroll}

@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const TimeFormat = (timestamp) => {
+export const TimeFormat = (timestamp) => {
         const now = moment();
         const diff = now.diff(moment(timestamp), 'days')
 
@@ -27,4 +27,20 @@ export const SidebarTimeFormat = (timestamp) => {
         }
     }
 
-export default TimeFormat;
+
+export const isImageUrl = (url) => {
+    return (
+      typeof url === "string" &&
+      (url.startsWith("http://") || url.startsWith("https://")) &&
+      /\.(jpg|jpeg|png|gif|webp)$/i.test(url)
+    );
+  };
+
+
+export const isAudioUrl = (url) => {
+    return (
+      typeof url === "string" &&
+      (url.startsWith("http://") || url.startsWith("https://")) &&
+      /\.(ogg|webm)$/i.test(url)
+    );
+};    

@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from '../../useRedux/userSlice';
-import { SidebarTimeFormat } from "../../utils/TimeFormat";
+import { isAudioUrl, isImageUrl, SidebarTimeFormat } from "../../utils/UtilifyFunc";
 import { FaUserCircle} from "react-icons/fa";
+import { Image, Mic } from 'lucide-react';
 
 const OtherUser = ({ user }) => {
 
@@ -34,12 +35,20 @@ const OtherUser = ({ user }) => {
                     <span className={isOnline ? "absolute bottom-9 right-1 w-3 h-3 bg-green-500 border-2 border-white rounded-full" : ""}></span>
                 </div>
                 <div className='flex flex-col'>
+
+                    {/* when the last message is imageUrl */}
                     <p>{user?.fullName}</p>
-                    <p className='text-sm text-gray-500'>
+                    {isImageUrl(user?.lastMessage) && <p className='text-sm text-gray-500'><Image size={19} /></p>}
+
+                    {/* when the last message is audioUrl */}
+                    {isAudioUrl(user?.lastMessage) && <p className='text-sm text-gray-500'><Mic size={19} /></p>}
+
+                    {/* when the last message is text */}
+                    {!isImageUrl(user?.lastMessage) &&  !isAudioUrl(user?.lastMessage)  && <p className='text-sm text-gray-500'>
                         {user?.lastMessage?.length > 32
                             ? user.lastMessage.slice(0, 32) + "....."
                             : user?.lastMessage || "Hey! I am using this chatapp..."}
-                    </p>
+                    </p>}
                 </div>
 
                 <div className="absolute top-3 md:left-76 sm:left-125 left-65">
