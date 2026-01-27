@@ -8,9 +8,10 @@ A powerful real-time chat application built using the **MERN stack** (MongoDB, E
 
 -  Secure authentication with **JWT**
 -  **One-to-one real-time messaging** using **Socket.io**
--  **Online/offline user status**
+-  **Online user status**
 -  Real-time **message preview** in sidebar
 -  Unsend and edit messges in real time
+-  Real-time voice recording
 -  Profile picture uploading
 -  Auto scroll to latest message
 -  Clean & responsive **UI (dark/light themes can be added later)**
